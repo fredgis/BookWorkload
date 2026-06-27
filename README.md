@@ -4,6 +4,7 @@ A single book chapter on extending Microsoft Fabric with the Extensibility Toolk
 
 ## Files
 
+- `workload-chapter.pdf` — a print-ready PDF with an interactive table of contents: clickable entries and PDF bookmarks (the viewer's outline sidebar). 41 pages, cover, and the diagrams rendered inline.
 - `workload-chapter.html` — the chapter as a styled, self-contained web page with two tabs (the outline and the full text). It needs no internet connection: the diagrams are embedded as inline SVG and there are no external scripts.
 - `workload-chapter-full.md` — the full written chapter (~103,000 characters).
 - `workload-chapter-outline.md` — the detailed outline.
