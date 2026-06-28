@@ -4,33 +4,44 @@
 
 ## Contents
 
-- **0. Before you begin**
-- **Understand**
-    - 1. What a workload is, and why you would build one
-    - 2. How a workload runs: architecture, the host, and one request
-    - 3. The manifest: the contract with Fabric
-    - 4. Identity and access with Microsoft Entra
-- **Develop**
-    - 5. The toolkit and the development environment
-    - 6. Building an item: editor, data, and capabilities
-    - 7. Developing with AI assistance
-    - 8. Diagnostics and debugging
-    - 9. Illustration: GreenGrid
-- **Go to production**
-    - 10. From developer mode to production
-    - 11. Hosting, domain, and identity
-    - 12. Security and compliance
-    - 13. Packaging, validation, and CI/CD
-    - 14. Patterns and anti-patterns
-    - 15. Illustration: SkyNav
-- **Distribute**
-    - 16. Make it available in your tenant
-    - 17. Publish to the marketplace for distribution
-    - 18. The post-publish lifecycle
-    - 19. Recap and next steps
-    - Appendices
+**[0. Before you begin](#0-before-you-begin)**
+
+**Understand**
+
+- **[1. What a workload is, and why you would build one](#1-what-a-workload-is-and-why-you-would-build-one)**
+- **[2. How a workload runs: architecture, the host, and one request](#2-how-a-workload-runs-architecture-the-host-and-one-request)**
+- **[3. The manifest: the contract with Fabric](#3-the-manifest-the-contract-with-fabric)**
+- **[4. Identity and access with Microsoft Entra](#4-identity-and-access-with-microsoft-entra)**
+
+**Develop**
+
+- **[5. The toolkit and the development environment](#5-the-toolkit-and-the-development-environment)**
+- **[6. Building an item: editor, data, and capabilities](#6-building-an-item-editor-data-and-capabilities)**
+- **[7. Developing with AI assistance](#7-developing-with-ai-assistance)**
+- **[8. Diagnostics and debugging](#8-diagnostics-and-debugging)**
+- **[9. Illustration: GreenGrid](#9-illustration-greengrid)**
+
+**Go to production**
+
+- **[10. From developer mode to production](#10-from-developer-mode-to-production)**
+- **[11. Hosting, domain, and identity](#11-hosting-domain-and-identity)**
+- **[12. Security and compliance](#12-security-and-compliance)**
+- **[13. Packaging, validation, and CI/CD](#13-packaging-validation-and-cicd)**
+- **[14. Patterns and anti-patterns](#14-patterns-and-anti-patterns)**
+- **[15. Illustration: SkyNav](#15-illustration-skynav)**
+
+**Distribute**
+
+- **[16. Make it available in your tenant](#16-make-it-available-in-your-tenant)**
+- **[17. Publish to the marketplace for distribution](#17-publish-to-the-marketplace-for-distribution)**
+- **[18. The post-publish lifecycle](#18-the-post-publish-lifecycle)**
+- **[19. Recap and next steps](#19-recap-and-next-steps)**
+
+**Appendices**
+
 
 ---
+
 
 > A single book chapter (≈ 150–200 pages).
 > Topic: extending Microsoft Fabric with the **Extensibility Toolkit**.

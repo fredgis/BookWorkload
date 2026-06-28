@@ -4,81 +4,92 @@
 
 ## Contents
 
-- **0. Before you begin**
-- **Understand**
-    - 1. What a workload is, and why you would build one
-        - 1.1 What Fabric gives you, and what a workload adds
-        - 1.2 The toolkit, when to use it, and its limits
-    - 2. How a workload runs: architecture, the host, and one request
-        - 2.1 The three parties and the host
-        - 2.2 Items as native artifacts
-        - 2.3 A request, step by step
-    - 3. The manifest: the contract with Fabric
-        - 3.1 Three manifests, one contract
-        - 3.2 Identity and naming
-    - 4. Identity and access with Microsoft Entra
-        - 4.1 The frontend-only model and the on-behalf-of token
-        - 4.2 The Entra application and calling services
-- **Develop**
-    - 5. The toolkit and the development environment
-        - 5.1 The Starter-Kit, the setup script, and the Entra app
-        - 5.2 Dev Server, Dev Gateway, and the Hello World checkpoint
-    - 6. Building an item: editor, data, and capabilities
-        - 6.1 The item, its editor, and how it surfaces
-        - 6.2 Reading data and storing state in OneLake
-        - 6.3 Capabilities that make it feel native, and when to add a backend
-    - 7. Developing with AI assistance
-        - 7.1 The AI-enabled repository: shared context and runnable commands
-        - 7.2 The Copilot agent, instructions, and the Fabric UX MCP server
-        - 7.3 What it generates, and keeping it honest
-    - 8. Diagnostics and debugging
-        - 8.1 Reading the chain, and the token and manifest boundaries
-        - 8.2 The Dev Gateway, the iframe boundary, and correlation
-    - 9. Illustration: GreenGrid
-        - 9.1 What GreenGrid is
-        - 9.2 The scoring service, in Python
-        - 9.3 Milestone 1: the workload calls the service
-        - 9.4 Milestones 2 and 3: real data and a native screen
-- **Go to production**
-    - 10. From developer mode to production
-        - 10.1 What changes
-        - 10.2 What to verify across the transition
-    - 11. Hosting, domain, and identity
-        - 11.1 Hosting, the verified domain, and the resource ID
-        - 11.2 A production identity without secrets
-    - 12. Security and compliance
-        - 12.1 Data stays in the tenant. Labels, DLP, and personal data
-        - 12.2 Secrets, telemetry, and monitoring
-    - 13. Packaging, validation, and CI/CD
-        - 13.1 The package and validation
-        - 13.2 Automating the pipeline
-    - 14. Patterns and anti-patterns
-        - 14.1 Patterns that hold up
-        - 14.2 Anti-patterns to avoid
-    - 15. Illustration: SkyNav
-        - 15.1 What SkyNav is, and how it is hosted
-        - 15.2 SkyNav's production identity and path to a tenant
-- **Distribute**
-    - 16. Make it available in your tenant
-        - 16.1 The Admin Portal versus the Workload Hub, and uploading
-        - 16.2 Internal publishing with Org.[Name]
-    - 17. Publish to the marketplace for distribution
-        - 17.1 The Workload Hub and the cross-tenant path
-        - 17.2 Review, compliance, and monetization
-        - 17.3 Choosing a path
-    - 18. The post-publish lifecycle
-        - 18.1 Updates, migration, and deprecation
-        - 18.2 Monitoring, consent, rollback, and feature flags
-    - 19. Recap and next steps
-    - Appendices
-        - Appendix A: Manifest field reference
-        - Appendix B: Dev Server, Dev Gateway, and Workload Validator commands
-        - Appendix C: AI assistant reference
-        - Appendix D: Python service reference
-        - Appendix E: Release and compliance checklist, diagnostics quick reference
-        - Appendix F: Glossary and resources
+**[0. Before you begin](#0-before-you-begin)**
+
+**Understand**
+
+- **[1. What a workload is, and why you would build one](#1-what-a-workload-is-and-why-you-would-build-one)**
+  - [1.1 What Fabric gives you, and what a workload adds](#11-what-fabric-gives-you-and-what-a-workload-adds)
+  - [1.2 The toolkit, when to use it, and its limits](#12-the-toolkit-when-to-use-it-and-its-limits)
+- **[2. How a workload runs: architecture, the host, and one request](#2-how-a-workload-runs-architecture-the-host-and-one-request)**
+  - [2.1 The three parties and the host](#21-the-three-parties-and-the-host)
+  - [2.2 Items as native artifacts](#22-items-as-native-artifacts)
+  - [2.3 A request, step by step](#23-a-request-step-by-step)
+- **[3. The manifest: the contract with Fabric](#3-the-manifest-the-contract-with-fabric)**
+  - [3.1 Three manifests, one contract](#31-three-manifests-one-contract)
+  - [3.2 Identity and naming](#32-identity-and-naming)
+- **[4. Identity and access with Microsoft Entra](#4-identity-and-access-with-microsoft-entra)**
+  - [4.1 The frontend-only model and the on-behalf-of token](#41-the-frontend-only-model-and-the-on-behalf-of-token)
+  - [4.2 The Entra application and calling services](#42-the-entra-application-and-calling-services)
+
+**Develop**
+
+- **[5. The toolkit and the development environment](#5-the-toolkit-and-the-development-environment)**
+  - [5.1 The Starter-Kit, the setup script, and the Entra app](#51-the-starter-kit-the-setup-script-and-the-entra-app)
+  - [5.2 Dev Server, Dev Gateway, and the Hello World checkpoint](#52-dev-server-dev-gateway-and-the-hello-world-checkpoint)
+- **[6. Building an item: editor, data, and capabilities](#6-building-an-item-editor-data-and-capabilities)**
+  - [6.1 The item, its editor, and how it surfaces](#61-the-item-its-editor-and-how-it-surfaces)
+  - [6.2 Reading data and storing state in OneLake](#62-reading-data-and-storing-state-in-onelake)
+  - [6.3 Capabilities that make it feel native, and when to add a backend](#63-capabilities-that-make-it-feel-native-and-when-to-add-a-backend)
+- **[7. Developing with AI assistance](#7-developing-with-ai-assistance)**
+  - [7.1 The AI-enabled repository: shared context and runnable commands](#71-the-ai-enabled-repository-shared-context-and-runnable-commands)
+  - [7.2 The Copilot agent, instructions, and the Fabric UX MCP server](#72-the-copilot-agent-instructions-and-the-fabric-ux-mcp-server)
+  - [7.3 What it generates, and keeping it honest](#73-what-it-generates-and-keeping-it-honest)
+- **[8. Diagnostics and debugging](#8-diagnostics-and-debugging)**
+  - [8.1 Reading the chain, and the token and manifest boundaries](#81-reading-the-chain-and-the-token-and-manifest-boundaries)
+  - [8.2 The Dev Gateway, the iframe boundary, and correlation](#82-the-dev-gateway-the-iframe-boundary-and-correlation)
+- **[9. Illustration: GreenGrid](#9-illustration-greengrid)**
+  - [9.1 What GreenGrid is](#91-what-greengrid-is)
+  - [9.2 The scoring service, in Python](#92-the-scoring-service-in-python)
+  - [9.3 Milestone 1: the workload calls the service](#93-milestone-1-the-workload-calls-the-service)
+  - [9.4 Milestones 2 and 3: real data and a native screen](#94-milestones-2-and-3-real-data-and-a-native-screen)
+
+**Go to production**
+
+- **[10. From developer mode to production](#10-from-developer-mode-to-production)**
+  - [10.1 What changes](#101-what-changes)
+  - [10.2 What to verify across the transition](#102-what-to-verify-across-the-transition)
+- **[11. Hosting, domain, and identity](#11-hosting-domain-and-identity)**
+  - [11.1 Hosting, the verified domain, and the resource ID](#111-hosting-the-verified-domain-and-the-resource-id)
+  - [11.2 A production identity without secrets](#112-a-production-identity-without-secrets)
+- **[12. Security and compliance](#12-security-and-compliance)**
+  - [12.1 Data stays in the tenant. Labels, DLP, and personal data](#121-data-stays-in-the-tenant-labels-dlp-and-personal-data)
+  - [12.2 Secrets, telemetry, and monitoring](#122-secrets-telemetry-and-monitoring)
+- **[13. Packaging, validation, and CI/CD](#13-packaging-validation-and-cicd)**
+  - [13.1 The package and validation](#131-the-package-and-validation)
+  - [13.2 Automating the pipeline](#132-automating-the-pipeline)
+- **[14. Patterns and anti-patterns](#14-patterns-and-anti-patterns)**
+  - [14.1 Patterns that hold up](#141-patterns-that-hold-up)
+  - [14.2 Anti-patterns to avoid](#142-anti-patterns-to-avoid)
+- **[15. Illustration: SkyNav](#15-illustration-skynav)**
+  - [15.1 What SkyNav is, and how it is hosted](#151-what-skynav-is-and-how-it-is-hosted)
+  - [15.2 SkyNav's production identity and path to a tenant](#152-skynavs-production-identity-and-path-to-a-tenant)
+
+**Distribute**
+
+- **[16. Make it available in your tenant](#16-make-it-available-in-your-tenant)**
+  - [16.1 The Admin Portal versus the Workload Hub, and uploading](#161-the-admin-portal-versus-the-workload-hub-and-uploading)
+  - [16.2 Internal publishing with Org.[Name]](#162-internal-publishing-with-orgname)
+- **[17. Publish to the marketplace for distribution](#17-publish-to-the-marketplace-for-distribution)**
+  - [17.1 The Workload Hub and the cross-tenant path](#171-the-workload-hub-and-the-cross-tenant-path)
+  - [17.2 Review, compliance, and monetization](#172-review-compliance-and-monetization)
+  - [17.3 Choosing a path](#173-choosing-a-path)
+- **[18. The post-publish lifecycle](#18-the-post-publish-lifecycle)**
+  - [18.1 Updates, migration, and deprecation](#181-updates-migration-and-deprecation)
+  - [18.2 Monitoring, consent, rollback, and feature flags](#182-monitoring-consent-rollback-and-feature-flags)
+- **[19. Recap and next steps](#19-recap-and-next-steps)**
+
+**Appendices**
+
+- [Appendix A: Manifest field reference](#appendix-a-manifest-field-reference)
+- [Appendix B: Dev Server, Dev Gateway, and Workload Validator commands](#appendix-b-dev-server-dev-gateway-and-workload-validator-commands)
+- [Appendix C: AI assistant reference](#appendix-c-ai-assistant-reference)
+- [Appendix D: Python service reference](#appendix-d-python-service-reference)
+- [Appendix E: Release and compliance checklist, diagnostics quick reference](#appendix-e-release-and-compliance-checklist-diagnostics-quick-reference)
+- [Appendix F: Glossary and resources](#appendix-f-glossary-and-resources)
 
 ---
+
 Microsoft Fabric ships with a fixed set of items: lakehouses, notebooks, pipelines, reports, and a few dozen more. For most analytics work that set is enough. It stops being enough the moment a team has a capability that belongs next to the data but has no home in the portal: a scoring service, a domain-specific authoring tool, an operational console wired to a particular industry. The Extensibility Toolkit closes that gap. It lets you add your own item types to Fabric so they behave like the built-in ones, while the code runs in your own cloud.
 
 This chapter teaches the workload model in four steps, after a short list of prerequisites. First, what a workload is and how Fabric runs it. Second, how you build one: the toolkit, the local development loop, items, data, state, the AI assistant the toolkit ships with, and the diagnostics that keep all of it honest. Third, how you take a finished workload to production: what changes from developer mode, how you secure it, how you package and automate it. Fourth, how you put it in front of users and keep it running.
@@ -763,6 +774,14 @@ flowchart LR
 
 The split of languages here is deliberate. The algorithm is GreenGrid's value, it is written in Python, and it stays on GreenGrid's server. The experience is the workload, it is TypeScript and React, and it runs in Fabric. The customer's data stays in OneLake. Three owners, three languages, one screen.
 
+Here is what that produces inside Fabric. The screenshot below is the GreenGrid Scorecard item open in a workspace, scoring five sites for a fictional customer, Contoso Energy.
+
+![The GreenGrid Scorecard item open inside Microsoft Fabric](assets/greengrid-scorecard.png)
+
+*Figure 9.1 · The GreenGrid Scorecard, a custom workload item, rendered natively in the Fabric portal. The breadcrumb, the chrome, and the theme belong to Fabric. The screen belongs to GreenGrid.*
+
+The numbers on that screen are the ones the Python service returns for the seed data in section 9.3. The portfolio averages 60 out of 100. Helsinki scores 80 and lands in Tier A on an 88 percent renewable mix, Warsaw scores 19 and falls to Tier C on 24 percent with the advice to increase renewable sourcing, and the three middle sites sit in Tier B. The strip across the top, OneLake then GreenGrid SaaS then the Fabric item, is the three-piece flow from the diagram made literal: the sites are read from OneLake, scored by the service, and drawn as cards. Nothing on the page hints that the scoring runs on a server outside Fabric, which is the whole point of a workload. A user created this item from New item, the same way they would create a lakehouse, and they open it, share it, and find it in search like any other Fabric artifact.
+
 ### 9.2 The scoring service, in Python
 
 The SaaS is a small FastAPI service. It takes a list of sites and returns, for each, a green score and a tier, plus a portfolio summary. The algorithm is intentionally simple, the chapter cares about the shape, not the data science, but it is a real, runnable service with validated inputs:
@@ -905,6 +924,12 @@ The seed array stood in for the customer's data, which lives in a Lakehouse as a
 ```
 
 The third milestone adds visuals and holds them to the Fabric UX system: Fluent UI components that match the portal and the host's theme so the screen follows Fabric between light and dark. GreenGrid stops there, no jobs, no managed identity, no backend of its own beyond the scoring service it calls, which is what makes it a clean illustration of development, and a reminder that a production workload adds everything the next movement covers.
+
+The same scored portfolio reads differently as a map. Figure 9.2 is a second view of the item, the five sites placed geographically and colored by tier, with the Tier C plant in Warsaw standing out in red against the greener sites to the west.
+
+![A map view of the same scored sites, colored by tier](assets/greengrid-sites-map.png)
+
+*Figure 9.2 · The third milestone, the scorecard turned graphical. The data behind the markers is identical to Figure 9.1, read from OneLake and scored by the same service. Only the rendering changed, which is exactly what keeping the data behind a function buys you.*
 
 ---
 
@@ -1156,7 +1181,21 @@ This is a production workload, not a reference architecture. It shows how the pr
 
 ### 15.1 What SkyNav is, and how it is hosted
 
-SkyNav is a Microsoft Fabric workload for a hot-air balloon fleet operator in the Loire Valley. Where GreenGrid was built from scratch to show the development loop, SkyNav is already finished and in production. It brings three experiences together inside one Fabric item, a real-time map of the fleet, a conversational agent for operations and weather, and a viewer over the operator's ontology of balloons, pilots, flights, and sites, reading from existing Fabric resources and presenting them as a native experience. It hosts its two sides on Azure: the frontend as a static site, the backend as an app service. Its workload manifest uses the FE-remote hosting type and points Fabric at the frontend's public address:
+SkyNav is a Microsoft Fabric workload for a hot-air balloon fleet operator in the Loire Valley. Where GreenGrid was built from scratch to show the development loop, SkyNav is already finished and in production, and it is a larger workload. Where GreenGrid is one screen over one service, SkyNav brings three experiences together inside a single Fabric item. A real-time map plots the fleet over the Loire valley, a conversational agent answers questions about operations and weather, and an ontology view shows the relationships between balloons, pilots, flights, and sites. All three read from existing Fabric resources, a KQL Eventhouse for telemetry and a Fabric ontology for the entities, and present them as a native experience in the portal.
+
+![SkyNav running inside Fabric: the fleet map and the conversational agent](assets/skynav-map.png)
+
+*Figure 15.1 · SkyNav open in Fabric. The map plots the fleet over the Loire, the toolbar filters balloons by flight phase, and the SkyNav Agent on the right has answered a fleet-status question by reading live telemetry. The tabs, the search bar, and the chrome belong to Fabric.*
+
+The agent is the part that shows the rest of the chapter at work. When a dispatcher asks for a fleet status, the question goes to SkyNav's backend, which runs a server-side tool loop: it queries the KQL telemetry for current positions and fuel, calls a weather service for winds aloft, and hands the results to a language model that writes the answer. The reply in the figure is not free text from a model guessing. It is grounded in the same telemetry the map is drawing, which is why the balloon counts and the fuel warnings line up with the markers. That backend is the optional service from section 11, given a real job to do, secured by the token validation from section 4.2 and reaching its data through the managed identity from section 11.2.
+
+Selecting a balloon drills into it. Figure 15.2 shows the detail panel for balloon B-001, its position, altitude, and propane, next to the agent computing an average pre-landing speed from the telemetry on request. The panel is the item's own screen, and the numbers come from OneLake and the Eventhouse, read as the signed-in user.
+
+![A balloon detail panel with the agent answering a telemetry question](assets/skynav-detail.png)
+
+*Figure 15.2 · Drilling into one balloon. The panel and the agent both read live data, and the agent's Focus Map action moves the map through the host API rather than around it, the boundary discipline from section 2 in production.*
+
+SkyNav hosts its two sides on Azure: the frontend as a static site, the backend as an app service. Its workload manifest uses the FE-remote hosting type and points Fabric at the frontend's public address:
 
 ```xml
 <Workload WorkloadName="Org.SkyNavAgent" HostingType="FERemote">
