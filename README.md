@@ -59,7 +59,7 @@ flowchart LR
 
 ### 0 · Before you begin
 
-Environment, prerequisites, and conventions, plus a five-minute first run that gets a Hello World item open inside Fabric before the model is explained.
+Concrete prerequisites (Node.js, Python, PowerShell, the Azure CLI, the .NET SDK, a code editor), a five-minute first run that gets a Hello World item open inside Fabric, and the common pitfalls that catch people before any code.
 
 ### Understand
 

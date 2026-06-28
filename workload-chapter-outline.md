@@ -102,6 +102,7 @@ flowchart LR
 
 - 0.1 Environment, accounts, and assumed concepts, Azure subscription and Entra tenant, a Fabric or Trial capacity with admin access, Node.js and the toolkit scripts. Familiarity with HTTPS, REST, OAuth/OIDC tokens, iframe messaging, and OneLake paths. The administrator and user roles kept separate.
 - 0.2 A five-minute first run, the shortest path from an empty folder to the Hello World item open inside Fabric, as a hook before the model.
+- 0.3 Common pitfalls, the environment traps that catch people before any code, capacity, developer mode, env files, token audience, framing, and package version.
 
 ---
 

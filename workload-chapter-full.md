@@ -7,6 +7,7 @@
 **[0. Before you begin](#0-before-you-begin)**
 
 - [A five-minute first run](#a-five-minute-first-run)
+- [Common pitfalls](#common-pitfalls)
 
 **Understand**
 
@@ -128,7 +129,14 @@ The chapter assumes a working environment and a little background, and naming th
 
 > Note on freshness. The Extensibility Toolkit moves quickly, and parts of it are in preview. Command names, manifest fields, and documentation links shift between releases. Where this chapter gives a specific name or URL, read it as correct at the time of writing, and check it against the current toolkit repository and the Microsoft Learn documentation when something does not match.
 
-You need an Azure subscription and a Microsoft Entra tenant where you can register an application, because every workload authenticates through an Entra app. You need a Fabric capacity, a paid one or a Trial, with a workspace to build in, and you need Fabric administrator access, because the developer settings and the package upload both live in the Admin Portal. On your machine you need Node.js for the frontend and the toolkit scripts, a recent Python for the services and tooling this chapter writes in it, PowerShell, and a code editor.
+You need an Azure subscription and a Microsoft Entra tenant where you can register an application, because every workload authenticates through an Entra app. You need a Fabric capacity, a paid one or a Trial, with a workspace to build in, and you need Fabric administrator access, because the developer settings and the package upload both live in the Admin Portal. On your machine you need a handful of local tools:
+
+- Node.js, for the frontend and the toolkit scripts.
+- A recent Python, for the services and tooling this chapter writes in.
+- PowerShell 7, which the setup and run scripts use.
+- The Azure CLI, for the Entra app creation the setup script performs and the `az login` identity the backend uses in development.
+- The .NET SDK, because the workload package is built and validated as a NuGet `.nupkg`.
+- A code editor, with Visual Studio Code the common choice, since the toolkit ships its AI assets for it.
 
 The chapter also assumes a few concepts rather than teaching them: web hosting and HTTPS, REST and JSON, OAuth and OpenID Connect tokens, iframe messaging through `postMessage`, and OneLake paths, the `Files` and `Tables` of a Lakehouse. Two roles run through the chapter, and they are different accounts: an administrator turns on developer mode and uploads the package, and a regular user creates and opens items. Keeping them straight saves confusion when a step that needs one is attempted as the other.
 
@@ -169,9 +177,29 @@ cd ../Run
 
 In the portal, an administrator turns on developer mode in the Admin Portal, and you switch your workspace to a Fabric or Trial capacity and enable Fabric Developer Mode. Open New item, create the Hello World the kit ships, and its editor opens inside Fabric, served from your machine. When that screen renders, the whole chain works and you are ready for the rest of the chapter. If it does not, section 8 turns the blank screen into a specific cause.
 
+### Common pitfalls
+
+Most early trouble is environment, not code. Knowing the usual traps up front turns a lost afternoon into a five-second check.
+
+- The workspace is on the wrong capacity. A workload only appears on a Fabric or Trial capacity, never a Power BI Pro one.
+- Developer mode is off. The portal ignores your dev instance until both the tenant setting and your own Fabric Developer Mode are on.
+- The environment files disagree with the portal. A stale app id, a different workspace, or a workload name that does not match is the usual reason the portal does not show your workload.
+- The token audience is wrong. A 401 from your backend almost always means the token's `aud` is not your Application ID URI.
+- Framing is blocked. If the iframe stays blank, the frontend is probably not letting Fabric frame it, or a manifest declaration disagrees.
+- The package version was already uploaded. Fabric refuses a duplicate, so every upload needs a fresh version.
+
+Each of these has a home later in the chapter. Naming them here means you recognize them on sight.
+
 ---
 
 # Understand
+
+> **Key takeaways**
+>
+> - A workload is a web app you host that Fabric renders as a native item, bound by a manifest and an Entra token.
+> - It inherits the platform's access control, OneLake storage, lineage, and sharing, so you declare those instead of building them.
+> - Three manifests carry the contract: the workload, the product, and the item.
+> - Reach for a workload when a user would create and open it as their own object, and a lighter extensibility point otherwise.
 
 ## 1. What a workload is, and why you would build one
 
@@ -447,6 +475,13 @@ Identity is only half of access. What the workload is allowed to do with the dat
 ---
 
 # Develop
+
+> **Key takeaways**
+>
+> - The Dev Server serves the workload from localhost and the Dev Gateway lets the Fabric portal render it.
+> - An item is its editor, its data read from OneLake as the signed-in user, and the capabilities that make it feel native.
+> - The toolkit's AI assistant can scaffold and operate the workload, while the boundaries still decide whether the result is correct.
+> - Diagnose by reading one boundary at a time: token, manifest, gateway, iframe.
 
 ## 5. The toolkit and the development environment
 
@@ -965,6 +1000,13 @@ The same scored portfolio reads differently as a map. Figure 9.2 is a second vie
 
 # Go to production
 
+> **Key takeaways**
+>
+> - Going to production is a substitution, not a rewrite. Swap each development convenience for its production form.
+> - Host the frontend under a verified domain, and give the backend a managed identity so nothing stores a secret.
+> - Keep data in the tenant, respect sensitivity labels, and carry correlation IDs into telemetry.
+> - Build and validate the package in a pipeline so every release is repeatable and versioned.
+
 ## 10. From developer mode to production
 
 ### 10.1 What changes
@@ -1191,7 +1233,7 @@ az staticwebapp deploy --name swa-yourworkload --source Workload/dist
 az webapp deploy --name beserver-yourworkload --src-path backend.zip --type zip
 ```
 
-The package upload that follows is the Admin Portal step, and for a workload distributed at scale Fabric's admin APIs let even that be scripted, so a tagged release flows from a commit to an available workload with no manual click. The payoff of the pipeline is repeatability: every environment is built the same way, every release is validated the same way, and the version always moves forward.
+The deploy job signs in to Azure with the `azure/login` action over OpenID Connect, so the pipeline stores no credential of its own, the no-secret rule from section 11 applied to CI. The package upload that follows is the Admin Portal step, and for a workload distributed at scale Fabric's admin APIs let even that be scripted, so a tagged release flows from a commit to an available workload with no manual click. The payoff of the pipeline is repeatability: every environment is built the same way, every release is validated the same way, and the version always moves forward.
 
 ## 14. Patterns and anti-patterns
 
@@ -1253,6 +1295,13 @@ SkyNav is built without secrets, the way section 11 recommends. User-facing call
 ---
 
 # Distribute
+
+> **Key takeaways**
+>
+> - Upload to your own tenant through the Admin Portal, or list on the Workload Hub for other tenants.
+> - The naming form follows the audience: `Org.[Name]` is internal, `[Publisher].[Workload]` is for the marketplace.
+> - A published workload has a life: updates, item migration, deprecation, and cross-tenant consent.
+> - The same package and build serve both paths. The review and the consent are what differ.
 
 ## 16. Make it available in your tenant
 
