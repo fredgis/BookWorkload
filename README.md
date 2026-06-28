@@ -98,7 +98,7 @@ Manifest reference, command reference, the AI assistant reference, a Python serv
 
 ## Files
 
-- `index.html`: redirects the GitHub Pages site to the chapter.
+- `index.html`: the chapter served at the GitHub Pages site root (a copy of `workload-chapter.html`).
 - `workload-chapter.html`: the self-contained web version, with the plan and the full text as two tabs.
 - `workload-chapter.pdf`: the print version with a cover, colored Contents, and bookmarks.
 - `workload-chapter-full.md` and `workload-chapter-outline.md`: the chapter and its outline.
