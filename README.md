@@ -57,36 +57,44 @@ flowchart LR
 
 ## Chapter outline
 
-**0 · Before you begin**
+### 0 · Before you begin
 
-**Understand**
+Environment, prerequisites, and the conventions used throughout.
+
+### Understand
+
 1. What a workload is, and why you would build one
 2. How a workload runs: architecture, the host, and one request
 3. The manifest: the contract with Fabric
 4. Identity and access with Microsoft Entra
 
-**Develop**
+### Develop
+
 5. The toolkit and the development environment
 6. Building an item: editor, data, and capabilities
 7. Developing with AI assistance
 8. Diagnostics and debugging
-9. Illustration: GreenGrid `← development sample`
+9. Illustration: GreenGrid (development sample)
 
-**Go to production**
+### Go to production
+
 10. From developer mode to production
 11. Hosting, domain, and identity
 12. Security and compliance
 13. Packaging, validation, and CI/CD
 14. Patterns and anti-patterns
-15. Illustration: SkyNav `← production sample`
+15. Illustration: SkyNav (production sample)
 
-**Distribute**
+### Distribute
+
 16. Make it available in your tenant
 17. Publish to the marketplace for distribution
 18. The post-publish lifecycle
 19. Recap and next steps
 
-**Appendices**: environment, manifest reference, token flows, and a release checklist.
+### Appendices
+
+Environment, manifest reference, token flows, and a release checklist.
 
 ## Files
 
