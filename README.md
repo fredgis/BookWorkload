@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/nfo-banner.svg" alt="Building Microsoft Fabric Workloads with the Extensibility Toolkit" width="760">
+</p>
+
 # Building Microsoft Fabric Workloads with the Extensibility Toolkit
 
 A single book chapter on extending Microsoft Fabric with the Extensibility Toolkit, from the first local prototype to a workload published in a tenant.

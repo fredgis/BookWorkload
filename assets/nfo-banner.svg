@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="757" height="755" viewBox="0 0 757 755" font-family="Cascadia Mono, Consolas, Menlo, monospace" font-size="15.0px">
+<defs>
+<linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a0f16"/><stop offset="1" stop-color="#05080c"/></linearGradient>
+<filter id="glow" x="-20%" y="-40%" width="140%" height="180%"><feGaussianBlur stdDeviation="2.0" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+<pattern id="scan" width="757" height="4" patternUnits="userSpaceOnUse"><rect width="757" height="1" y="0" fill="#ffffff" opacity="0.025"/></pattern>
+</defs>
+<rect width="757" height="755" fill="url(#bg)"/>
+<rect width="757" height="755" fill="url(#scan)"/>
+<rect x="3" y="3" width="751" height="749" fill="none" stroke="#143b2a" stroke-width="1.5" rx="8"/>
+<text x="26.0" y="41.0" fill="#ffb000" xml:space="preserve">╔════════════════════════════════════════════════════════════════════════════╗</text>
+<text x="26.0" y="60.0" fill="#ffb000" xml:space="preserve">║            &gt;&gt; MICROSOFT FABRIC  //  CUSTOM WORKLOAD RELEASE &lt;&lt;             ║</text>
+<text x="26.0" y="79.0" fill="#ffb000" xml:space="preserve">╚════════════════════════════════════════════════════════════════════════════╝</text>
+<text x="26.0" y="117.0" fill="#36e0ff" xml:space="preserve" filter="url(#glow)">                ███████╗ █████╗ ██████╗ ██████╗ ██╗ ██████╗</text>
+<text x="26.0" y="136.0" fill="#36e0ff" xml:space="preserve" filter="url(#glow)">                ██╔════╝██╔══██╗██╔══██╗██╔══██╗██║██╔════╝</text>
+<text x="26.0" y="155.0" fill="#36e0ff" xml:space="preserve" filter="url(#glow)">                █████╗  ███████║██████╔╝██████╔╝██║██║</text>
+<text x="26.0" y="174.0" fill="#36e0ff" xml:space="preserve" filter="url(#glow)">                ██╔══╝  ██╔══██║██╔══██╗██╔══██╗██║██║</text>
+<text x="26.0" y="193.0" fill="#36e0ff" xml:space="preserve" filter="url(#glow)">                ██║     ██║  ██║██████╔╝██║  ██║██║╚██████╗</text>
+<text x="26.0" y="212.0" fill="#36e0ff" xml:space="preserve" filter="url(#glow)">                ╚═╝     ╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝╚═╝ ╚═════╝</text>
+<text x="26.0" y="250.0" fill="#ff5cd0" xml:space="preserve" filter="url(#glow)">██╗    ██╗ ██████╗ ██████╗ ██╗  ██╗██╗      ██████╗  █████╗ ██████╗ ███████╗</text>
+<text x="26.0" y="269.0" fill="#ff5cd0" xml:space="preserve" filter="url(#glow)">██║    ██║██╔═══██╗██╔══██╗██║ ██╔╝██║     ██╔═══██╗██╔══██╗██╔══██╗██╔════╝</text>
+<text x="26.0" y="288.0" fill="#ff5cd0" xml:space="preserve" filter="url(#glow)">██║ █╗ ██║██║   ██║██████╔╝█████╔╝ ██║     ██║   ██║███████║██║  ██║███████╗</text>
+<text x="26.0" y="307.0" fill="#ff5cd0" xml:space="preserve" filter="url(#glow)">██║███╗██║██║   ██║██╔══██╗██╔═██╗ ██║     ██║   ██║██╔══██║██║  ██║╚════██║</text>
+<text x="26.0" y="326.0" fill="#ff5cd0" xml:space="preserve" filter="url(#glow)">╚███╔███╔╝╚██████╔╝██║  ██║██║  ██╗███████╗╚██████╔╝██║  ██║██████╔╝███████║</text>
+<text x="26.0" y="345.0" fill="#ff5cd0" xml:space="preserve" filter="url(#glow)"> ╚══╝╚══╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═════╝ ╚══════╝</text>
+<text x="26.0" y="402.0" fill="#1f9b54" xml:space="preserve">────────────────────────────────────────────────────────────────────────────</text>
+<text x="26.0" y="421.0" fill="#39ff14" xml:space="preserve">     [*]  B U I L D I N G   F A B R I C   W O R K L O A D S   //  v1.0      </text>
+<text x="26.0" y="440.0" fill="#1f9b54" xml:space="preserve">────────────────────────────────────────────────────────────────────────────</text>
+<text x="26.0" y="478.0" xml:space="preserve"><tspan fill="#1f9b54">┌── </tspan><tspan fill="#ffb000">RELEASE.NFO</tspan><tspan fill="#1f9b54"> ─────────────────────────────────────────────────────────────┐</tspan></text>
+<text x="26.0" y="497.0" xml:space="preserve"><tspan fill="#1f9b54">│  </tspan><tspan fill="#39ff14">&gt; </tspan><tspan fill="#8cff6b">TITLE  </tspan><tspan fill="#36e0ff">  -&gt;  </tspan><tspan fill="#c8d3de">Building Microsoft Fabric Workloads</tspan></text>
+<text x="26.0" y="516.0" xml:space="preserve"><tspan fill="#1f9b54">│  </tspan><tspan fill="#39ff14">&gt; </tspan><tspan fill="#8cff6b">SUBJECT</tspan><tspan fill="#36e0ff">  -&gt;  </tspan><tspan fill="#c8d3de">The Extensibility Toolkit, from prototype to published</tspan></text>
+<text x="26.0" y="535.0" xml:space="preserve"><tspan fill="#1f9b54">│  </tspan><tspan fill="#39ff14">&gt; </tspan><tspan fill="#8cff6b">AUTHOR </tspan><tspan fill="#36e0ff">  -&gt;  </tspan><tspan fill="#c8d3de">fredgis</tspan></text>
+<text x="26.0" y="554.0" xml:space="preserve"><tspan fill="#1f9b54">│  </tspan><tspan fill="#39ff14">&gt; </tspan><tspan fill="#8cff6b">FORMAT </tspan><tspan fill="#36e0ff">  -&gt;  </tspan><tspan fill="#c8d3de">Book chapter  //  MD . HTML . PDF (interactive TOC)</tspan></text>
+<text x="26.0" y="573.0" xml:space="preserve"><tspan fill="#1f9b54">│  </tspan><tspan fill="#39ff14">&gt; </tspan><tspan fill="#8cff6b">STAGES </tspan><tspan fill="#36e0ff">  -&gt;  </tspan><tspan fill="#c8d3de">Understand &gt; Develop &gt; Production &gt; Distribute</tspan></text>
+<text x="26.0" y="592.0" xml:space="preserve"><tspan fill="#1f9b54">│  </tspan><tspan fill="#39ff14">&gt; </tspan><tspan fill="#8cff6b">STACK  </tspan><tspan fill="#36e0ff">  -&gt;  </tspan><tspan fill="#c8d3de">TypeScript/React . Python . KQL . Fabric IQ</tspan></text>
+<text x="26.0" y="611.0" xml:space="preserve"><tspan fill="#1f9b54">│  </tspan><tspan fill="#39ff14">&gt; </tspan><tspan fill="#8cff6b">SAMPLES</tspan><tspan fill="#36e0ff">  -&gt;  </tspan><tspan fill="#c8d3de">GreenGrid [dev]  .  SkyNav [prod]</tspan></text>
+<text x="26.0" y="630.0" fill="#1f9b54" xml:space="preserve">└────────────────────────────────────────────────────────────────────────────┘</text>
+<text x="26.0" y="668.0" xml:space="preserve"><tspan fill="#36e0ff">&gt; </tspan><tspan fill="#c8d3de">Understand the model.  Develop with AI.  Ship it.  Distribute it.</tspan></text>
+<text x="26.0" y="706.0" xml:space="preserve"><tspan fill="#39ff14">[ok] </tspan><tspan fill="#1f9b54">All systems nominal.   Greetz to the Fabric workload crew.</tspan></text>
+<text x="26.0" y="725.0" fill="#1f9b54" xml:space="preserve">────────────────────────────────────────────────────────────────────────────</text>
+</svg>
