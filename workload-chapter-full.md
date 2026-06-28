@@ -280,11 +280,11 @@ export async function onItemOpened(client: WorkloadClientAPI, itemId: string) {
 
 The iframe boundary is the isolation model, by design. Your code cannot reach into Fabric's page, and Fabric does not reach into yours. Everything crosses through the host API, which keeps the contract explicit and is the reason the manifest matters so much. A workload that respects this reads the theme rather than hard-coding colors, asks the host to navigate rather than manipulating the browser history directly, and raises notifications through the client rather than rendering its own toast in a corner. The payoff is that the workload keeps feeling native as Fabric evolves, because it depends on the contract and not on the portal's internals.
 
-The host API is also the seam at which Fabric does work on the workload's behalf that the workload could not do safely itself: minting a scoped token, opening a system dialog, writing to a notification surface shared with every other item. Treating it as the single, deliberate channel between the two sides is therefore not a limitation to route around but the very thing that lets the workload be both sandboxed and native at once.
+The host API is also the seam at which Fabric does work on the workload's behalf that the workload could not do safely itself: minting a scoped token, opening a system dialog, writing to a notification surface shared with every other item. Treating it as the single, deliberate channel between the two sides is what lets the workload be both sandboxed and native at once.
 
 ### 2.2 Items as native artifacts
 
-The item is the unit that makes a workload feel native. When your workload defines an item type, instances of it can be created, read, updated, and deleted through Fabric APIs. They obey the workspace's access control. They appear in search and lineage, and they take part in deployment pipelines. The toolkit also lets you store an item's definition, its configuration and whatever else describes that instance, directly in OneLake, in a hidden folder that end users do not see. Because the state is stored as part of the item, it travels with the item through sharing and deployment. An item is therefore not just a screen. It is a governed object with persisted state.
+The item is the unit that makes a workload feel native. When your workload defines an item type, instances of it can be created, read, updated, and deleted through Fabric APIs. They obey the workspace's access control. They appear in search and lineage, and they take part in deployment pipelines. The toolkit also lets you store an item's definition, its configuration and whatever else describes that instance, directly in OneLake, in a hidden folder that end users do not see. Because the state is stored as part of the item, it travels with the item through sharing and deployment. That persisted, governed state is what separates an item from a plain screen.
 
 That last property has consequences a first-time builder rarely anticipates. Because the state is part of the item and lives in OneLake, you do not run a database to hold per-item configuration, you do not back one up, and you do not reconcile its access control with the workspace's. When a user shares the item, the state goes with it. When a deployment pipeline promotes the item from a development workspace to production, the state is promoted too. The item is self-describing, and the workload is the code that gives that self-describing object behavior. Designing with this in mind, putting genuinely item-scoped state into the item definition rather than into a side store, is one of the habits that separates a workload that ages gracefully from one that accumulates operational debt.
 
@@ -386,7 +386,7 @@ The workload name is the identifier Fabric uses to register the workload, and it
 
 A marketplace name is reserved permanently when you confirm it on the first upload, so a rename later is a migration, not an edit. Choosing the form up front, even if you start internal and move to the marketplace later, saves a painful change at the worst time. If there is any chance the workload will one day be distributed, it is cheaper to pick a publisher-and-workload name now and keep it through the internal phase than to rename across a package, an Entra app, and every tenant that already installed it.
 
-There is a quieter reason to settle the name early, too. It threads through more than the package: it is in the Entra application's identifiers, in the URLs of the resource ID, and in every tenant's record of what they installed. Renaming is therefore not a string change but a coordinated migration across all of those, the kind of work no one wants to schedule once real users depend on the workload.
+There is a quieter reason to settle the name early, too. It threads through more than the package: it is in the Entra application's identifiers, in the URLs of the resource ID, and in every tenant's record of what they installed. Renaming therefore means a coordinated migration across all of those, the kind of work no one wants to schedule once real users depend on the workload.
 
 ## 4. Identity and access with Microsoft Entra
 
@@ -747,7 +747,7 @@ The design-system knowledge comes from a different mechanism. The repository's M
 }
 ```
 
-The agent supplies the workload patterns. The MCP server supplies the UX patterns. Together they keep the generated code aligned with both, so a screen the assistant produces is not only wired correctly into Fabric but also looks like Fabric.
+The agent supplies the workload patterns. The MCP server supplies the UX patterns. Together they keep the generated code aligned with both, so a screen the assistant produces is both wired correctly into Fabric and looks like Fabric.
 
 ### 7.3 What it generates, and keeping it honest
 
@@ -1355,7 +1355,7 @@ The selected-tenants stage is the one teams most often skip and most often regre
 
 ### 17.2 Review, compliance, and monetization
 
-The review exists because the workload is about to run in tenants you do not control, and it checks more than the package: requirements come in three categories, general, workload, and item, plus a vendor attestation describing how the workload handles data and security, and the Entra application must be not only domain-verified but publisher-verified. A listing also needs a privacy policy, a support contact, and clear documentation.
+The review exists because the workload is about to run in tenants you do not control, and it checks more than the package: requirements come in three categories, general, workload, and item, plus a vendor attestation describing how the workload handles data and security, and the Entra application must be both domain-verified and publisher-verified. A listing also needs a privacy policy, a support contact, and clear documentation.
 
 A marketplace workload can charge for itself, and the toolkit is hands-off about how: it provides no billing machinery, so you integrate the commercial marketplace, an Azure Marketplace SaaS offer set up in Partner Center, with a subscription landing page, a webhook for lifecycle events, and the marketplace's fulfillment and metering APIs, or run your own external billing, or a hybrid of the two. The webhook is the part that touches your backend, and in Python it is a small endpoint that reacts to the subscription lifecycle the marketplace drives:
 

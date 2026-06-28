@@ -43,7 +43,7 @@
 ---
 
 
-> A single book chapter (≈ 150–200 pages).
+> A single book chapter (about 150 to 200 pages).
 > Topic: extending Microsoft Fabric with the **Extensibility Toolkit**.
 > Audience: developers and architects building their first Fabric workload.
 
@@ -89,11 +89,11 @@ flowchart LR
 | Sections | Movement | Pages |
 |---|---|---|
 | 0 | Before you begin | ~5 |
-| 1–4 | Understand | ~28 |
-| 5–9 | Develop (by hand, with AI, diagnostics, GreenGrid) | ~80 |
-| 10–15 | Go to production | ~60 |
-| 16–19 | Distribute | ~30 |
-| Appendices A–F | Reference | ~10 |
+| 1-4 | Understand | ~28 |
+| 5-9 | Develop (by hand, with AI, diagnostics, GreenGrid) | ~80 |
+| 10-15 | Go to production | ~60 |
+| 16-19 | Distribute | ~30 |
+| Appendices A-G | Reference | ~10 |
 | **Total** | | **~213** |
 
 ---
