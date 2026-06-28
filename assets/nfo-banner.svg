@@ -2,7 +2,6 @@
 <defs>
 <linearGradient id="body" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a0f16"/><stop offset="1" stop-color="#05080c"/></linearGradient>
 <linearGradient id="titlebar" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#15202b"/><stop offset="1" stop-color="#0e1822"/></linearGradient>
-<linearGradient id="heroGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#36e0ff"/><stop offset="0.45" stop-color="#5aa0ff"/><stop offset="0.75" stop-color="#b06bff"/><stop offset="1" stop-color="#ff5cd0"/></linearGradient>
 <linearGradient id="sweep" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity="0"/><stop offset="0.5" stop-color="#9be9ff" stop-opacity="0.06"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient>
 <filter id="glow" x="-20%" y="-60%" width="140%" height="220%"><feGaussianBlur stdDeviation="2.4"/></filter>
 <pattern id="scan" width="757" height="4" patternUnits="userSpaceOnUse"><rect width="757" height="1" fill="#ffffff" opacity="0.022"/></pattern>
@@ -14,43 +13,43 @@
 <rect x="0" y="0" width="757" height="90" fill="url(#sweep)"><animateTransform attributeName="transform" type="translate" from="0 -90" to="0 801" dur="6s" repeatCount="indefinite"/></rect>
 <rect width="757" height="38" fill="url(#titlebar)"/>
 <circle cx="26" cy="19" r="6.5" fill="#ff5f57"/><circle cx="48" cy="19" r="6.5" fill="#febc2e"/><circle cx="70" cy="19" r="6.5" fill="#28c840"/>
-<text x="378" y="23" font-size="13" fill="#6b7681" text-anchor="middle" font-family="Cascadia Mono, Consolas, monospace">fredgis — fabric-workload-release — pwsh</text>
+<text x="378" y="23" font-size="13" fill="#6b7681" text-anchor="middle" font-family="Cascadia Mono, Consolas, monospace">fredgis — fabric-extensibility-toolkit — pwsh</text>
 <line x1="0" y1="38" x2="757" y2="38" stroke="#0b1b14" stroke-width="1"/>
-<clipPath id="tw"><rect x="46.0" y="52.0" width="0" height="19.0"><animate attributeName="width" from="0" to="288.5" dur="1.8s" begin="0.4s" fill="freeze" calcMode="linear"/></rect></clipPath>
+<clipPath id="tw"><rect x="46.0" y="52.0" width="0" height="19.0"><animate attributeName="width" from="0" to="378.6" dur="2.0s" begin="0.4s" fill="freeze" calcMode="linear"/></rect></clipPath>
 <text x="28.0" y="67.0" fill="#39ff14" xml:space="preserve">❯</text>
 <g clip-path="url(#tw)">
-<text x="46.0" y="67.0" fill="#c8d3de" xml:space="preserve">fabric-workload --release --neon</text>
+<text x="46.0" y="67.0" fill="#c8d3de" xml:space="preserve">.\Setup.ps1 -WorkloadName &quot;Org.MyWorkload&quot;</text>
 </g>
-<rect x="46.0" y="53.0" width="8" height="15.0" fill="#39ff14"><animate attributeName="x" from="46.0" to="334.5" dur="1.8s" begin="0.4s" fill="freeze"/><animate attributeName="opacity" values="1;0;1" dur="1s" begin="2.2s" repeatCount="indefinite"/></rect>
+<rect x="46.0" y="53.0" width="8" height="15.0" fill="#39ff14"><animate attributeName="x" from="46.0" to="424.7" dur="2.0s" begin="0.4s" fill="freeze"/><animate attributeName="opacity" values="1;0;1" dur="1s" begin="2.4s" repeatCount="indefinite"/></rect>
 <text x="28.0" y="105.0" fill="#ffb000" xml:space="preserve">╔════════════════════════════════════════════════════════════════════════════╗</text>
 <text x="28.0" y="124.0" fill="#ffb000" xml:space="preserve">║            &gt;&gt; MICROSOFT FABRIC  //  CUSTOM WORKLOAD RELEASE &lt;&lt;             ║</text>
 <text x="28.0" y="143.0" fill="#ffb000" xml:space="preserve">╚════════════════════════════════════════════════════════════════════════════╝</text>
 <g filter="url(#glow)" opacity="0.5"><animate attributeName="opacity" values="0.30;0.85;0.30" dur="2.6s" repeatCount="indefinite"/>
-<text x="28.0" y="181.0" fill="url(#heroGrad)" xml:space="preserve">███████╗ █████╗ ██████╗ ██████╗ ██╗ ██████╗</text>
-<text x="28.0" y="200.0" fill="url(#heroGrad)" xml:space="preserve">██╔════╝██╔══██╗██╔══██╗██╔══██╗██║██╔════╝</text>
-<text x="28.0" y="219.0" fill="url(#heroGrad)" xml:space="preserve">█████╗  ███████║██████╔╝██████╔╝██║██║</text>
-<text x="28.0" y="238.0" fill="url(#heroGrad)" xml:space="preserve">██╔══╝  ██╔══██║██╔══██╗██╔══██╗██║██║</text>
-<text x="28.0" y="257.0" fill="url(#heroGrad)" xml:space="preserve">██║     ██║  ██║██████╔╝██║  ██║██║╚██████╗</text>
-<text x="28.0" y="276.0" fill="url(#heroGrad)" xml:space="preserve">╚═╝     ╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝╚═╝ ╚═════╝</text>
-<text x="28.0" y="295.0" fill="url(#heroGrad)" xml:space="preserve">██╗    ██╗ ██████╗ ██████╗ ██╗  ██╗██╗      ██████╗  █████╗ ██████╗ ███████╗</text>
-<text x="28.0" y="314.0" fill="url(#heroGrad)" xml:space="preserve">██║    ██║██╔═══██╗██╔══██╗██║ ██╔╝██║     ██╔═══██╗██╔══██╗██╔══██╗██╔════╝</text>
-<text x="28.0" y="333.0" fill="url(#heroGrad)" xml:space="preserve">██║ █╗ ██║██║   ██║██████╔╝█████╔╝ ██║     ██║   ██║███████║██║  ██║███████╗</text>
-<text x="28.0" y="352.0" fill="url(#heroGrad)" xml:space="preserve">██║███╗██║██║   ██║██╔══██╗██╔═██╗ ██║     ██║   ██║██╔══██║██║  ██║╚════██║</text>
-<text x="28.0" y="371.0" fill="url(#heroGrad)" xml:space="preserve">╚███╔███╔╝╚██████╔╝██║  ██║██║  ██╗███████╗╚██████╔╝██║  ██║██████╔╝███████║</text>
-<text x="28.0" y="390.0" fill="url(#heroGrad)" xml:space="preserve"> ╚══╝╚══╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═════╝ ╚══════╝</text>
+<text x="28.0" y="181.0" fill="#2EC771" xml:space="preserve">███████╗ █████╗ ██████╗ ██████╗ ██╗ ██████╗</text>
+<text x="28.0" y="200.0" fill="#2EC771" xml:space="preserve">██╔════╝██╔══██╗██╔══██╗██╔══██╗██║██╔════╝</text>
+<text x="28.0" y="219.0" fill="#2EC771" xml:space="preserve">█████╗  ███████║██████╔╝██████╔╝██║██║</text>
+<text x="28.0" y="238.0" fill="#2EC771" xml:space="preserve">██╔══╝  ██╔══██║██╔══██╗██╔══██╗██║██║</text>
+<text x="28.0" y="257.0" fill="#2EC771" xml:space="preserve">██║     ██║  ██║██████╔╝██║  ██║██║╚██████╗</text>
+<text x="28.0" y="276.0" fill="#2EC771" xml:space="preserve">╚═╝     ╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝╚═╝ ╚═════╝</text>
+<text x="28.0" y="295.0" fill="#2EC771" xml:space="preserve">██╗    ██╗ ██████╗ ██████╗ ██╗  ██╗██╗      ██████╗  █████╗ ██████╗ ███████╗</text>
+<text x="28.0" y="314.0" fill="#2EC771" xml:space="preserve">██║    ██║██╔═══██╗██╔══██╗██║ ██╔╝██║     ██╔═══██╗██╔══██╗██╔══██╗██╔════╝</text>
+<text x="28.0" y="333.0" fill="#2EC771" xml:space="preserve">██║ █╗ ██║██║   ██║██████╔╝█████╔╝ ██║     ██║   ██║███████║██║  ██║███████╗</text>
+<text x="28.0" y="352.0" fill="#2EC771" xml:space="preserve">██║███╗██║██║   ██║██╔══██╗██╔═██╗ ██║     ██║   ██║██╔══██║██║  ██║╚════██║</text>
+<text x="28.0" y="371.0" fill="#2EC771" xml:space="preserve">╚███╔███╔╝╚██████╔╝██║  ██║██║  ██╗███████╗╚██████╔╝██║  ██║██████╔╝███████║</text>
+<text x="28.0" y="390.0" fill="#2EC771" xml:space="preserve"> ╚══╝╚══╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═════╝ ╚══════╝</text>
 </g>
-<text x="28.0" y="181.0" fill="url(#heroGrad)" xml:space="preserve">███████╗ █████╗ ██████╗ ██████╗ ██╗ ██████╗</text>
-<text x="28.0" y="200.0" fill="url(#heroGrad)" xml:space="preserve">██╔════╝██╔══██╗██╔══██╗██╔══██╗██║██╔════╝</text>
-<text x="28.0" y="219.0" fill="url(#heroGrad)" xml:space="preserve">█████╗  ███████║██████╔╝██████╔╝██║██║</text>
-<text x="28.0" y="238.0" fill="url(#heroGrad)" xml:space="preserve">██╔══╝  ██╔══██║██╔══██╗██╔══██╗██║██║</text>
-<text x="28.0" y="257.0" fill="url(#heroGrad)" xml:space="preserve">██║     ██║  ██║██████╔╝██║  ██║██║╚██████╗</text>
-<text x="28.0" y="276.0" fill="url(#heroGrad)" xml:space="preserve">╚═╝     ╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝╚═╝ ╚═════╝</text>
-<text x="28.0" y="295.0" fill="url(#heroGrad)" xml:space="preserve">██╗    ██╗ ██████╗ ██████╗ ██╗  ██╗██╗      ██████╗  █████╗ ██████╗ ███████╗</text>
-<text x="28.0" y="314.0" fill="url(#heroGrad)" xml:space="preserve">██║    ██║██╔═══██╗██╔══██╗██║ ██╔╝██║     ██╔═══██╗██╔══██╗██╔══██╗██╔════╝</text>
-<text x="28.0" y="333.0" fill="url(#heroGrad)" xml:space="preserve">██║ █╗ ██║██║   ██║██████╔╝█████╔╝ ██║     ██║   ██║███████║██║  ██║███████╗</text>
-<text x="28.0" y="352.0" fill="url(#heroGrad)" xml:space="preserve">██║███╗██║██║   ██║██╔══██╗██╔═██╗ ██║     ██║   ██║██╔══██║██║  ██║╚════██║</text>
-<text x="28.0" y="371.0" fill="url(#heroGrad)" xml:space="preserve">╚███╔███╔╝╚██████╔╝██║  ██║██║  ██╗███████╗╚██████╔╝██║  ██║██████╔╝███████║</text>
-<text x="28.0" y="390.0" fill="url(#heroGrad)" xml:space="preserve"> ╚══╝╚══╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═════╝ ╚══════╝</text>
+<text x="28.0" y="181.0" fill="#2EC771" xml:space="preserve">███████╗ █████╗ ██████╗ ██████╗ ██╗ ██████╗</text>
+<text x="28.0" y="200.0" fill="#2EC771" xml:space="preserve">██╔════╝██╔══██╗██╔══██╗██╔══██╗██║██╔════╝</text>
+<text x="28.0" y="219.0" fill="#2EC771" xml:space="preserve">█████╗  ███████║██████╔╝██████╔╝██║██║</text>
+<text x="28.0" y="238.0" fill="#2EC771" xml:space="preserve">██╔══╝  ██╔══██║██╔══██╗██╔══██╗██║██║</text>
+<text x="28.0" y="257.0" fill="#2EC771" xml:space="preserve">██║     ██║  ██║██████╔╝██║  ██║██║╚██████╗</text>
+<text x="28.0" y="276.0" fill="#2EC771" xml:space="preserve">╚═╝     ╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝╚═╝ ╚═════╝</text>
+<text x="28.0" y="295.0" fill="#2EC771" xml:space="preserve">██╗    ██╗ ██████╗ ██████╗ ██╗  ██╗██╗      ██████╗  █████╗ ██████╗ ███████╗</text>
+<text x="28.0" y="314.0" fill="#2EC771" xml:space="preserve">██║    ██║██╔═══██╗██╔══██╗██║ ██╔╝██║     ██╔═══██╗██╔══██╗██╔══██╗██╔════╝</text>
+<text x="28.0" y="333.0" fill="#2EC771" xml:space="preserve">██║ █╗ ██║██║   ██║██████╔╝█████╔╝ ██║     ██║   ██║███████║██║  ██║███████╗</text>
+<text x="28.0" y="352.0" fill="#2EC771" xml:space="preserve">██║███╗██║██║   ██║██╔══██╗██╔═██╗ ██║     ██║   ██║██╔══██║██║  ██║╚════██║</text>
+<text x="28.0" y="371.0" fill="#2EC771" xml:space="preserve">╚███╔███╔╝╚██████╔╝██║  ██║██║  ██╗███████╗╚██████╔╝██║  ██║██████╔╝███████║</text>
+<text x="28.0" y="390.0" fill="#2EC771" xml:space="preserve"> ╚══╝╚══╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═════╝ ╚══════╝</text>
 <text x="28.0" y="447.0" fill="#1f9b54" xml:space="preserve">────────────────────────────────────────────────────────────────────────────</text>
 <text x="28.0" y="466.0" fill="#39ff14" xml:space="preserve">     [*]  B U I L D I N G   F A B R I C   W O R K L O A D S   //  v1.0      </text>
 <text x="28.0" y="485.0" fill="#1f9b54" xml:space="preserve">────────────────────────────────────────────────────────────────────────────</text>
