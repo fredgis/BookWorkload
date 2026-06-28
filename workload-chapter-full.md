@@ -6,6 +6,8 @@
 
 **[0. Before you begin](#0-before-you-begin)**
 
+- [A five-minute first run](#a-five-minute-first-run)
+
 **Understand**
 
 - **[1. What a workload is, and why you would build one](#1-what-a-workload-is-and-why-you-would-build-one)**
@@ -87,6 +89,7 @@
 - [Appendix D: Python service reference](#appendix-d-python-service-reference)
 - [Appendix E: Release and compliance checklist, diagnostics quick reference](#appendix-e-release-and-compliance-checklist-diagnostics-quick-reference)
 - [Appendix F: Glossary and resources](#appendix-f-glossary-and-resources)
+- [Appendix G: One-page cheat sheet](#appendix-g-one-page-cheat-sheet)
 
 ---
 
@@ -123,6 +126,8 @@ flowchart LR
 
 The chapter assumes a working environment and a little background, and naming them up front keeps the later sections from stopping to backfill.
 
+> Note on freshness. The Extensibility Toolkit moves quickly, and parts of it are in preview. Command names, manifest fields, and documentation links shift between releases. Where this chapter gives a specific name or URL, read it as correct at the time of writing, and check it against the current toolkit repository and the Microsoft Learn documentation when something does not match.
+
 You need an Azure subscription and a Microsoft Entra tenant where you can register an application, because every workload authenticates through an Entra app. You need a Fabric capacity, a paid one or a Trial, with a workspace to build in, and you need Fabric administrator access, because the developer settings and the package upload both live in the Admin Portal. On your machine you need Node.js for the frontend and the toolkit scripts, a recent Python for the services and tooling this chapter writes in it, PowerShell, and a code editor.
 
 The chapter also assumes a few concepts rather than teaching them: web hosting and HTTPS, REST and JSON, OAuth and OpenID Connect tokens, iframe messaging through `postMessage`, and OneLake paths, the `Files` and `Tables` of a Lakehouse. Two roles run through the chapter, and they are different accounts: an administrator turns on developer mode and uploads the package, and a regular user creates and opens items. Keeping them straight saves confusion when a step that needs one is attempted as the other.
@@ -143,11 +148,34 @@ pip install fastapi "uvicorn[standard]" pydantic \
 
 A practical note on the snippets: the TypeScript ones run in the browser through the toolkit SDK, and the Python ones run in a service you host and is called over HTTPS. The chapter labels each at the point of use, so you never have to guess which side of the iframe a piece of code lives on.
 
+### A five-minute first run
+
+If you would rather see something on screen before reading the model, this is the shortest path from an empty folder to a working item open inside Fabric. It is the same Hello World the rest of the chapter builds on, and section 5 explains every step it runs through here.
+
+```bash
+# 1. clone the Starter-Kit and install the frontend
+git clone https://github.com/microsoft/fabric-extensibility-toolkit
+cd fabric-extensibility-toolkit
+
+# 2. one-time setup: registers the Entra app and writes your config
+cd scripts/Setup
+./Setup.ps1 -WorkloadName "Org.YourWorkload"
+
+# 3. two terminals: serve the workload, then bridge Fabric to it
+cd ../Run
+./StartDevServer.ps1     # terminal 1: the frontend and its dev APIs
+./StartDevGateway.ps1    # terminal 2: the bridge from the portal to localhost
+```
+
+In the portal, an administrator turns on developer mode in the Admin Portal, and you switch your workspace to a Fabric or Trial capacity and enable Fabric Developer Mode. Open New item, create the Hello World the kit ships, and its editor opens inside Fabric, served from your machine. When that screen renders, the whole chain works and you are ready for the rest of the chapter. If it does not, section 8 turns the blank screen into a specific cause.
+
 ---
 
 # Understand
 
 ## 1. What a workload is, and why you would build one
+
+Most teams meet Fabric with a tool they already rely on: a scoring model, an authoring screen, an operational console the business runs on. The question is rarely whether Fabric can hold the data, it already can, but whether that tool should stay a separate website users log into on the side, or become something that lives inside Fabric like any other item. A workload is how you choose the second answer. The rest of this section is about what that buys you, and about the test that tells you when a lighter extensibility point is the better fit.
 
 ### 1.1 What Fabric gives you, and what a workload adds
 
@@ -605,6 +633,8 @@ The frontend starts it through the host and shows the progress the status endpoi
 ## 7. Developing with AI assistance
 
 The toolkit is an AI-enabled repository. Beyond the source and the Hello World sample, it ships the context, the runnable procedures, the agent, and the design-system knowledge an AI assistant needs to scaffold and operate a workload alongside you. The result is that much of sections 5 and 6, creating an item, wiring its editor, running and deploying the workload, can be driven from a prompt, while the boundaries from section 8 still decide whether the result is correct.
+
+> Note on freshness. The AI surface of the toolkit, the agent name, the activation keywords, the exact command files, moves faster than the rest of the platform. Read the specific names in this section as a snapshot and the shape as the lesson: a shared context folder, a set of runnable commands, an agent that reads both. When a keyword here no longer matches what the repository ships, the repository is right. The capabilities outlast their current spelling.
 
 ```mermaid
 flowchart TB
@@ -1242,6 +1272,8 @@ When the workload name takes the `Org.[Name]` form, the upload is internal publi
 
 Uploading to your own tenant is the end of the road for a workload that serves one organization. When you want other organizations to install your workload, the path is the Workload Hub, and the two start from the same package and diverge in what they require.
 
+> Note on freshness. The marketplace path is the youngest part of this story and the most likely to have changed by the time you read it. The review steps, the attestations, the monetization options, and even the names of the surfaces move as the program matures. Read this section for the shape of the process, the package, the registration, the review, the cross-tenant consent, and confirm the current requirements against the Workload Hub documentation before you plan a release around them.
+
 ```mermaid
 flowchart TB
     PKG["Workload package (.nupkg)"]
@@ -1364,3 +1396,46 @@ A sign-off page for a release, and a boundary-by-boundary table of what each bou
 
 ### Appendix F: Glossary and resources
 Workload, item, manifest, Dev Gateway, on-behalf-of token, `Fabric.Extend`, OneLake, Workload Hub, `ActivityId`, `RequestId`. With links to the Extensibility Toolkit documentation on Microsoft Learn, the microsoft/fabric-extensibility-toolkit repository and its `.ai/` and `.github/copilot` assets, and the GreenGrid and SkyNav repositories.
+
+### Appendix G: One-page cheat sheet
+
+A scannable summary of the chapter. Keep it next to the keyboard.
+
+Lifecycle commands:
+
+```bash
+# one-time setup: registers the Entra app and writes config
+./scripts/Setup/Setup.ps1 -WorkloadName "Org.YourWorkload"
+
+# two long-running processes, one per terminal
+./scripts/Run/StartDevServer.ps1     # serve the workload UI and APIs
+./scripts/Run/StartDevGateway.ps1    # bridge the Fabric portal to localhost
+
+# before any upload: validate the package in your pipeline
+./scripts/Validate.ps1 -Package out/*.nupkg
+```
+
+The three manifests:
+
+| File | Declares |
+|------|----------|
+| `workload.json` | the workload, its Entra app, its cloud endpoints |
+| `product.json` | what users see: create cards and recommended items |
+| `item.json` | one item type: its editor route and its operations |
+
+The one identity rule. Use the user's on-behalf-of token for the user's data, and the service's own managed identity for the service's own access. Store no secret. If a secret is unavoidable, keep it in Key Vault.
+
+Developer mode to production, the swaps:
+
+| Development | Production |
+|-------------|------------|
+| Dev Gateway from localhost | frontend hosted under a verified domain |
+| developer-mode dev instance | `.nupkg` uploaded in the Admin Portal |
+| your `az login` identity | a managed identity |
+| local config files | environment config, no secret in the frontend |
+
+Diagnostics, by boundary. A 401 is a token or audience mismatch. A blank iframe is usually a manifest or framing problem. A request that never arrives points at the Dev Gateway or a CORS rule. Read the chain one boundary at a time, and carry `ActivityId` and `RequestId` into every log line.
+
+The naming fork. `Org.[Name]` is an internal upload to your own tenant. `[Publisher].[Workload]` is a marketplace listing for other tenants. The package and the build are the same. The review and the consent are not.
+
+The four movements. Understand the model, develop it by hand and with the assistant, take it to production by substitution, distribute it to a tenant or the marketplace.

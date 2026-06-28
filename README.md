@@ -24,7 +24,7 @@ The frontend code is TypeScript and React, because that is what Fabric loads in 
 |--------|-------|--------------|
 | Online (HTML) | https://fredgis.github.io/BookWorkload/ | Two tabs, the plan and the full chapter. Self-contained, syntax-highlighted, diagrams inline. |
 | PDF | [workload-chapter.pdf](workload-chapter.pdf) | Cover page, colored Contents, PDF bookmarks, clickable links. |
-| Markdown | [workload-chapter-full.md](workload-chapter-full.md) | The full text, about 110,000 characters. |
+| Markdown | [workload-chapter-full.md](workload-chapter-full.md) | The full text, about 115,000 characters. |
 | Outline | [workload-chapter-outline.md](workload-chapter-outline.md) | The detailed plan. |
 
 ## The plan, and how the samples fit
@@ -59,7 +59,7 @@ flowchart LR
 
 ### 0 · Before you begin
 
-Environment, prerequisites, and the conventions used throughout.
+Environment, prerequisites, and conventions, plus a five-minute first run that gets a Hello World item open inside Fabric before the model is explained.
 
 ### Understand
 
@@ -94,7 +94,7 @@ Environment, prerequisites, and the conventions used throughout.
 
 ### Appendices
 
-Environment, manifest reference, token flows, and a release checklist.
+Manifest reference, command reference, the AI assistant reference, a Python service reference, a release and compliance checklist, a glossary, and a one-page cheat sheet.
 
 ## Files
 
