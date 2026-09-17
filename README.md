@@ -20,6 +20,8 @@ The manuscript starts with the business case, then follows the workload lifecycl
 
 The official starter kit uses TypeScript and React for the publisher-hosted frontend. The server examples use Python.
 
+GreenGrid reference implementation: [fredgis/FY27FabricMotion](https://github.com/fredgis/FY27FabricMotion).
+
 > Content reviewed against Microsoft Learn and the official toolkit repositories on September 17, 2026. The review includes source inspection and static checks, not Fabric tenant or publishing execution.
 
 ## Read the manuscript
@@ -40,6 +42,7 @@ Four movements follow the workload lifecycle. The first also explains why the mo
 |---|---|---|
 | **Fast track** | 0 → 2 → 5 → 6 → 9 | Follow the first workload path and connect the GreenGrid example |
 | **Production track** | 10 through 17 | Turn the prototype into a hosted, secured, packaged, assigned, and supportable product |
+| **Product and business** | 1 → 16 → 18 | Define the customer, pilot, commercial path, and value signals |
 
 ```mermaid
 flowchart LR

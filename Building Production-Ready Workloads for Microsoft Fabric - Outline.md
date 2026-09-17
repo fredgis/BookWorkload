@@ -2,9 +2,7 @@
 
 *From the ISV business case and architecture to secure delivery, operations, and distribution*
 
-> Pin the technical reference record near the opening: implementation commit, separate release-tag commit, frontend SDK dependency range and lockfile status, publishing-validator tag/commit, technical verification date, editorial date, and validation scope. State plainly that documentary and static checks do not equal tenant execution.
-
-> Reviewed against Microsoft Learn and the official toolkit repositories on September 17, 2026.
+> Keep only a short editorial date near the opening. Put the implementation pins, validator version, source record, discrepancies, and validation scope in Appendix F.
 
 ## Contents
 
@@ -107,16 +105,16 @@ flowchart LR
 
 | Path | Sections | Outcome |
 |---|---|---|
-| **Fast track** | 0 → 2 → 5 → 6 → 9 | Follow the source-inspected first-workload path and connect the GreenGrid example |
+| **Fast track** | 0 → 2 → 5 → 6 → 9 | Follow the first-workload path and connect the GreenGrid example |
 | **Production track** | 10 through 17 | Turn the prototype into a hosted, secured, packaged, assigned, and supportable product |
+| **Product and business** | 1 → 16 → 18 | Define the customer, commercial path, pilot, and value signals |
 
-- Introduce a visual convention for **Stable concept** versus **Current platform behavior, verified September 2026**.
-- Direct business readers to section 1 before either technical path.
+- Use one general snippet convention. Keep local warnings only where a simplification affects security, reliability, or deployment.
 
 # 0. Before you begin
 
 - 0.1 Environment, accounts, and assumed concepts. Entra app creation rights and an F, P, or Trial capacity are required. An Azure subscription is optional until Azure hosting is used. Node.js, PowerShell, .NET, Azure CLI, and the toolkit scripts. Administrator, capacity, workspace, publisher, and user roles kept separate.
-- 0.2 A source-inspected first-run path, used only after the common and local-development prerequisites are satisfied. Record the expected Hello World result and the pinned setup-script defect without claiming tenant execution.
+- 0.2 A short first-run path in action order: clone, setup, start Dev Server, start Dev Gateway, enable Developer Mode, open Hello World. Keep one local warning and move script details to Appendix B.
 - 0.3 Common pitfalls, the environment traps that catch people before any code, capacity, developer mode, env files, token audience, framing, and package version.
 
 ---
@@ -128,8 +126,8 @@ flowchart LR
 ## 1. What a workload is, and why an ISV would build one
 
 - Introduce GreenGrid immediately as the running example: an energy-scoring SaaS that works with approved OneLake data while its scoring IP stays in the publisher cloud.
-- 1.1 The ISV business case: bring your service to Fabric data. Cover ISVs and SDCs, an existing SaaS or PaaS, publisher-owned IP, lower per-customer integration work, and a repeatable path from one tenant to selected customers and public distribution. Separate Workload Hub installation from Microsoft Marketplace commerce.
-- 1.2 What Fabric gives you, and what a workload adds. Workspaces, items, Fabric APIs, OneLake data, and explicit integrations with catalog, monitoring, Git, and deployment. State clearly that sensitivity protection and built-in behavior are not inherited automatically.
+- 1.1 The ISV business case: bring your service to Fabric data. Distinguish an ISV extending a product from an SDC productizing repeated project work. Cover targeted account access, faster first value, lower integration effort, recurring use, pilot conversion, support cost, Marketplace, and conditional co-sell.
+- 1.2 What Fabric gives you, and what a workload adds. Lead with the user benefit of one item and workspace experience. Refer capability details to Appendix A.
 - 1.3 The toolkit, when to use it, and its limits. Add an observable decision matrix comparing a Fabric workload, Power BI custom visual, Activator, pipeline/notebook/function, and separate SaaS experience. Include persistent item, dedicated editor, lifecycle, distribution, required skills, SDK compatibility, publishing review, consent, support, and operations.
 
 ```mermaid
@@ -158,7 +156,7 @@ flowchart LR
 
 ## 2. How a workload runs: architecture, the host, and one request
 
-- 2.1 The Fabric host, your frontend, and an optional backend. Include Fabric APIs, OneLake resources, Entra, and the fact that the publisher frontend runs inside the iframe after loading from its endpoint.
+- 2.1 The Fabric host, your frontend, and an optional backend. Keep the architecture overview here. Move remote header and token subtleties to section 4 and Appendix F.
 
 ```mermaid
 flowchart TB
@@ -223,7 +221,7 @@ sequenceDiagram
 
 ## 3. The manifest package: the contract with Fabric
 
-- 3.1 Workload, product, and paired item manifests. Separate source tree from built package structure. Add an object/level/owner/delivery-or-storage/change-moment table for workload manifest, product manifest, item-type XML/JSON, and item-instance definition parts. Keep current package limits with exact sources.
+- 3.1 Workload, product, and paired item manifests. Separate source tree, built package, hosted application, and item-instance definitions. Keep detailed limits in Appendix A.
 - 3.2 Identity and naming, `Org.[Name]` for one tenant versus `[Publisher].[Workload]` for cross-tenant publication. Permanent reservation on first confirmation, assignment scopes, public publishing requirements, and the separate Microsoft Marketplace SaaS offer.
 
 | Aspect | `Org.[Name]` (internal) | `[Publisher].[Workload]` (cross-tenant) |
@@ -248,8 +246,8 @@ sequenceDiagram
 
 ## 5. The toolkit and the development environment
 
-- 5.1 The starter kit, setup script, and Entra applications. Contrast the Learn `Setup.ps1` wrapper command with the pinned `SetupWorkload.ps1` implementation, list its parameters, and document the unsupported final `-Force` handoff. Show why local development still uses real delegated identity.
-- 5.2 Dev Server, Dev Gateway, and the Hello World checkpoint. Exact tenant-setting names, personal Fabric Developer Mode, F/P/Trial capacity, Chromium Local Network Access, source-inspected script signatures, the Linux `InteractiveLogin` caveat, and the expected two-terminal result without claiming tenant execution.
+- 5.1 The starter kit, setup script, and Entra applications. Follow the action order and refer exact parameters and pinned defects to Appendix B.
+- 5.2 Dev Server, Dev Gateway, and the Hello World checkpoint. Two terminals, tenant settings, Developer Mode, Local Network Access, and the observable Hello World result.
 
 ```mermaid
 flowchart LR
@@ -273,9 +271,9 @@ flowchart LR
 
 ## 6. Building an item: editor, data, and capabilities
 
-- 6.1 The item, its editor, and how it surfaces. Add the source-verified `scripts/Setup/CreateNewItem.ps1 -ItemName ... [-srcItemName ...]` path, its `scripts/Setup` working directory, and the mandatory `ITEM_NAMES`, `Product.json`, locale, and `App.tsx` follow-up. Then cover views, routes, paired item manifests, and compact definition parts updated through item CRUD APIs.
+- 6.1 The item, its editor, and how it surfaces. Create the item, complete `ITEM_NAMES`, `Product.json`, locale, and route wiring, then show the compact definition and editor result. Exact command details stay in Appendix B.
 - 6.2 Separating item definitions from OneLake data. Resource-specific Storage tokens, backend OBO for OneLake when needed, and no customer data, secrets, or large results in the item definition.
-- 6.3 Remote jobs, lifecycle events, and other capabilities. `SwitchToRemoteHosting.ps1` signature and source-inspected caveats, `HostingType="Remote"`, schema `2.100.0`, Job Scheduler declarations, unresolved official job-route differences, base Monitoring Hub listing versus optional actions and Recent Runs, soft/hard delete, and restore.
+- 6.3 Remote jobs, lifecycle events, and other capabilities. Explain the observable capability result and keep script parameters, version quirks, and source discrepancies in Appendices A, B, and F.
 
 ## 7. Developing with AI assistance
 
@@ -284,38 +282,9 @@ flowchart LR
 - Add the visual rule **AI output is a proposal, not platform truth**.
 - Structure the method as Frame → Ground → Bound → Review → Verify, with an expected result for each step, followed by the four contract gates: SDK → manifests → build → runtime.
 
-```mermaid
-flowchart TB
-    DEVR["Developer request"]
-    subgraph KIT["Versioned repository guidance"]
-        direction TB
-        CTX[".ai/context<br/>fabric + workload knowledge"]
-        CMD[".ai/commands<br/>task procedures"]
-        COP[".github/copilot<br/>agent + instructions"]
-    end
-    LEARN["Microsoft Learn<br/>current product authority"]
-    MCP["Optional community UX MCP<br/>referenced by the toolkit"]
-    OUT["Proposed code and repository changes"]
-    DEVR --> COP
-    COP --> CTX
-    COP --> CMD
-    COP --> LEARN
-    COP -.->|"optional UX lookup"| MCP
-    CMD --> OUT
-    LEARN --> OUT
-    style DEVR fill:#6e5494,stroke:#553c7b,color:#ffffff
-    style KIT fill:#e8f6ec,stroke:#2ea44f,color:#1b7a37
-    style CTX fill:#1565c0,stroke:#0d47a1,color:#ffffff
-    style CMD fill:#2ea44f,stroke:#1b7a37,color:#ffffff
-    style COP fill:#8957e5,stroke:#6e40c9,color:#ffffff
-    style MCP fill:#0d9488,stroke:#0a6b62,color:#ffffff
-    style LEARN fill:#1565c0,stroke:#0d47a1,color:#ffffff
-    style OUT fill:#e36209,stroke:#b14e00,color:#ffffff
-```
-
-- 7.1 Repository guidance: useful, mutable, and versioned. `.ai/context`, `.ai/commands`, and the difference between written procedures and shipped executable commands.
-- 7.2 The Copilot agent and the optional community UX MCP. `@fabric`, scoped instructions, review of community dependencies, and no implied Microsoft certification.
-- 7.3 What it generates, and keeping it honest. Paired item manifests, routes, locales, scoped token calls, Dev Gateway verification, local package checks, and separate publishing validation.
+- 7.1 Repository guidance: useful, mutable, and versioned. Keep the distinction between written guidance and executable commands, with the detailed file map in Appendix C.
+- 7.2 The Copilot agent and the optional community UX MCP. Retain one bounded prompt. Move MCP configuration and dependency review to Appendix C.
+- 7.3 What it generates, and keeping it honest. Keep a short acceptance rule across SDK, manifests, build, and runtime.
 
 ## 8. Diagnostics and debugging
 
@@ -380,7 +349,7 @@ flowchart LR
 
 ## 13. Packaging, validation, and CI/CD
 
-- 13.1 Package build, schema checks, and publishing validation. Define the release unit across package, frontend, backend, definition schema, and permissions. Use one version source of truth, verify the manifest and generated `.nupkg`, and document the pinned build script's unchecked native exit codes. Pin validator `v2025.12.1`, use its effective Node.js 20 minimum, canonical `Preview` or `GeneralAvailability` stage, and generated evidence after tenant publication.
+- 13.1 Package build, schema checks, and publishing validation. Keep the compatibility set, version source, package verification, and distinction between local checks and publishing review. Move validator particulars to Appendix B.
 - 13.2 Automating the pipeline. Infrastructure as code, Windows runner for current PowerShell scripts, publisher-owned lockfile before `npm ci`, pinned `build:prod` script name, OIDC for Azure deployment, UI-based package upload, Admin API automation only for listing/assignment, and a validation-stage table with inputs, outputs, owners, and evidence.
 
 ## 14. Patterns and anti-patterns
@@ -401,7 +370,7 @@ flowchart LR
 
 ## 16. Publish across tenants: Workload Hub and Microsoft Marketplace
 
-- 16.1 Selected tenants, Preview, and GA. Add the full stage matrix: audience, identity/naming, prerequisites, actor, validation, observable result, and exact source. Selected tenants use a publisher test plan rather than formal publishing validation. Preview and GA approval belongs to the publisher and Fabric workload team, while customer administrators act later on consent and assignment. Define publish, activate, consent, and assign separately.
+- 16.1 Selected tenants, Preview, and GA. Use a readable stage table with audience, publisher action, customer/admin action, and result. Keep exact evidence in Appendix F. Define publish, activate, consent, and assign separately.
 
 ```mermaid
 flowchart TB
@@ -440,17 +409,17 @@ flowchart TB
     style HUB fill:#1565c0,stroke:#0d47a1,color:#ffffff
 ```
 
-- 16.2 Publishing requirements, commerce, and support. Fabric validation and attestation, privacy/terms/help links, verified publisher, trial-requirement discrepancy, and the required Microsoft Marketplace SaaS offer with Contact me, Free trial, Get it now (Free), or Sell through Microsoft.
-- 16.3 Choosing a path. Reuse the product-fit criteria from 1.3, then compare internal, selected-tenant, Preview, and GA paths by audience, durable cost, and hard-to-change decisions. State that distribution is a channel, not a sales guarantee.
+- 16.2 Publishing requirements, commerce, and support. Explain the customer journey from value proposition through approval, setup, entitlement, and support. Distinguish existing SaaS customers, new customers, Marketplace models, and conditional co-sell. Move webhook code to Appendix D and requirement conflicts to Appendix F.
+- 16.3 Choosing a path. Keep the distribution choices, then define a small selected-tenant pilot and success signals for value, onboarding effort, recurring use, conversion, and support.
 
 ## 17. The post-publish lifecycle
 
-- 17.1 Updates, migration, and deprecation. Definition migration, activation, deactivation, and keeping customer data separate from control-plane definition parts.
-- 17.2 Monitoring, consent, rollback, and feature flags. Roll back by packaging known-good code under a new forward version, not by reusing an old package version.
+- 17.1 Updates, migration, and deprecation. Tie compatibility to customer trust: older items still open and migrate safely.
+- 17.2 Monitoring, consent, rollback, and feature flags. Explain permission changes before consent and recover through a known-good forward version.
 
 ## 18. Recap and next steps
 
-- 18.1 The workload model end to end, the ISV/SDC business bridge, and concrete next actions by role: product owner, architect/security lead, developer, release engineer, and publisher/operations owner.
+- 18.1 End with a customer, problem, pilot, value signal, and commercial path, followed by concise actions for the remaining roles.
 
 ---
 
@@ -458,12 +427,12 @@ flowchart TB
 
 - **Appendix A: Manifest package reference** (`WorkloadManifest.xml`, `Product.json`, paired item XML/JSON, release checks, limits, naming)
 - **Appendix B: Setup, development, package, and validator commands** (actor, directory, exact parameters, expected output, versioned source, and source-inspected defects)
-- **Appendix C: AI guidance reference** (guidance hierarchy and the SDK → manifests → build → runtime gates)
-- **Appendix D: Python service reference** (example location, dependencies, label, boundary, and production gaps)
+- **Appendix C: AI guidance reference** (guidance hierarchy, file map, optional MCP configuration, and SDK → manifests → build → runtime gates)
+- **Appendix D: Python service reference** (example location, dependencies, boundary, production gaps, and Marketplace webhook)
 - **Appendix E: Release and compliance checklist, diagnostics quick reference**
 - **Appendix F: Glossary and resources** (reference baseline, provenance register, primary sources, and maintenance rule)
 - **Appendix G: Quick reference** (commands and essential decisions, with links back to the full explanations)
 
 ---
 
-*Illustration: GreenGrid (development, FY27FabricMotion repository, micro hack 2). Primary references: Microsoft Learn Extensibility Toolkit documentation, Fabric Admin Workloads API reference, Microsoft Marketplace SaaS offer documentation, and the official microsoft/fabric-extensibility-toolkit repository.*
+*Illustration: GreenGrid ([fredgis/FY27FabricMotion](https://github.com/fredgis/FY27FabricMotion), micro hack 2). Primary references: Microsoft Learn Extensibility Toolkit documentation, Fabric Admin Workloads API reference, Microsoft Marketplace SaaS offer documentation, and the official microsoft/fabric-extensibility-toolkit repository.*

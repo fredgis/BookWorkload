@@ -2,17 +2,7 @@
 
 *From the ISV business case and architecture to secure delivery, operations, and distribution*
 
-> Reviewed against Microsoft Learn and the official toolkit repositories on September 17, 2026. This is a documentary and static validation record, not a claim that the procedures were executed in a Fabric tenant.
-
-| Reference baseline | Pinned value |
-|---|---|
-| Official toolkit implementation | `microsoft/fabric-extensibility-toolkit` at commit [`dacab1b391d03010ba61a0446126d05515c487f0`](https://github.com/microsoft/fabric-extensibility-toolkit/commit/dacab1b391d03010ba61a0446126d05515c487f0) |
-| Toolkit release reference | Tag [`v2026.03`](https://github.com/microsoft/fabric-extensibility-toolkit/tree/v2026.03) points to commit [`fbdc891e83d14fbfefd4f7e7e27194fd97f153ed`](https://github.com/microsoft/fabric-extensibility-toolkit/commit/fbdc891e83d14fbfefd4f7e7e27194fd97f153ed). The implementation pin above is five commits ahead |
-| Frontend SDK declaration | `@ms-fabric/workload-client` range `^3.1.1`. The toolkit has no dependency lockfile at the pinned commit, so an exact resolved version cannot be proven |
-| Publishing validator | `microsoft/fabric-extensibility-toolkit-validator` tag [`v2025.12.1`](https://github.com/microsoft/fabric-extensibility-toolkit-validator/releases/tag/v2025.12.1), commit [`78e17c385ad182f4a293dcab02c2eaa50aa7b361`](https://github.com/microsoft/fabric-extensibility-toolkit-validator/commit/78e17c385ad182f4a293dcab02c2eaa50aa7b361). Source-inspected, not run |
-| Technical verification date | September 17, 2026 |
-| Editorial revision date | September 17, 2026 |
-| Validation scope | Primary-source review, repository inspection, static snippet checks, Mermaid rendering, and artifact generation. No tenant, publishing-validator, or Marketplace lifecycle execution |
+> Editorially revised September 17, 2026. The technical baseline, source record, and validation scope are in Appendix F.
 
 ## Contents
 
@@ -20,7 +10,7 @@
 
 **[0. Before you begin](#0-before-you-begin)**
 
-- [A source-inspected first-run path](#a-source-inspected-first-run-path)
+- [First run](#first-run)
 - [Common pitfalls](#common-pitfalls)
 
 **Understand**
@@ -105,15 +95,15 @@
 
 ---
 
-Microsoft Fabric ships with a broad set of items: lakehouses, notebooks, pipelines, reports, and many more. An independent software vendor (ISV) or software development company (SDC) still has a different problem to solve. Its product may already run as SaaS or PaaS, hold years of domain knowledge, and serve customers well, yet remain disconnected from the data those customers manage in Fabric. A workload creates the bridge. It puts the company's experience inside Fabric while the service and intellectual property remain on infrastructure the company operates.
+Microsoft Fabric ships with lakehouses, notebooks, pipelines, reports, and many other items. An independent software vendor (ISV) or software development company (SDC) may already have a useful SaaS, PaaS, API, or repeatable client solution, but no product surface where Fabric users work. A workload creates that surface while the service and intellectual property remain on infrastructure the publisher operates.
 
-That position can shorten a customer's path from data to product value. The customer works in a familiar Fabric workspace and can keep source data in OneLake. The ISV avoids rebuilding its service separately for every account, while gaining a route to selected tenants and, after the required review and Marketplace setup, broader distribution through the Fabric ecosystem. The opportunity is real, but it is not automatic: the publisher still owns the service, its security, its support model, and every data transfer outside Fabric.
+For the customer, this can shorten the path from governed data to a useful result. For the publisher, it can reduce repeated integration work, support recurring use inside Fabric, and create a route to customers whose data teams already use the platform. Those are product goals to validate, not outcomes Fabric guarantees.
 
 This manuscript teaches the workload model in four movements. First, why an ISV would build one and how Fabric runs it. Second, how to develop an item with the toolkit, including the local loop, definitions, OneLake data, AI guidance, and diagnostics. Third, how to host, secure, package, and operate it. Fourth, how to assign it inside one tenant or publish it across tenants.
 
-GreenGrid appears as a worked illustration at the end of the Develop movement. It is not a reference architecture. Its job is to make the development loop concrete before the chapter returns to product-neutral production and distribution guidance.
+GreenGrid appears at the end of Develop as a worked illustration. The production and distribution guidance remains product-neutral.
 
-The official starter kit uses TypeScript and React for the publisher-hosted frontend that Fabric loads in an iframe. The backend is optional and can use any HTTPS-capable stack. This manuscript uses Python for scoring, token validation, jobs, and operational examples because it is common in data teams. Each snippet states whether it belongs in the browser or on the server.
+The official starter kit uses TypeScript and React for the publisher-hosted frontend that Fabric loads in an iframe. The backend is optional and can use any HTTPS-capable stack. Python is used here for service examples.
 
 ```mermaid
 flowchart LR
@@ -139,26 +129,21 @@ The manuscript assumes familiarity with web applications, REST and JSON, OAuth c
 
 By the end, the reader should be able to decide whether a workload fits the product, explain each browser, Fabric, and publisher boundary, build and diagnose a first item, define a production release unit, and choose an internal or cross-tenant distribution path.
 
-This manuscript supports two reading paths:
+Choose the path that matches the decision in front of you:
 
 | Path | Read | Outcome |
 |---|---|---|
 | **Fast track** | 0 → 2 → 5 → 6 → 9 | Follow the first-workload path, understand the runtime, build an item, and connect the GreenGrid example |
 | **Production track** | Sections 10 through 17 | Turn the prototype into a hosted, secured, packaged, assigned, and supportable product |
+| **Product and business** | 1 → 16 → 18 | Decide who the workload serves, how it reaches customers, and what a pilot must prove |
 
-Read section 1 first when the decision is commercial rather than technical: it explains why an ISV or SDC would invest in a workload and which parts of the existing SaaS or PaaS stay unchanged.
-
-Two labels separate durable architecture from details that Microsoft may change:
-
-> **Stable concept.** A design rule or boundary that should remain useful across toolkit releases.
-
-> **Current platform behavior, verified September 2026.** A command, limit, schema, tenant setting, publishing stage, or other time-sensitive implementation detail.
+Code snippets focus on the concept being explained. Where a simplification affects security, reliability, or deployment, the limitation is stated beside the example. Version-specific details and source references are collected in the appendices.
 
 ---
 
 # 0. Before you begin
 
-The chapter assumes web hosting and HTTPS, REST and JSON, OAuth and OpenID Connect concepts, source control, and basic Fabric workspaces and items. The tools and permissions then depend on the path you follow:
+The hands-on path assumes web hosting and HTTPS, REST and JSON, OAuth and OpenID Connect concepts, source control, and basic Fabric workspaces and items.
 
 | Scenario | Required environment | Actor or permission | Observable readiness |
 |---|---|---|---|
@@ -168,17 +153,9 @@ The chapter assumes web hosting and HTTPS, REST and JSON, OAuth and OpenID Conne
 | Azure hosting | Azure subscription, target resources, deployment identity | Azure subscription/resource owner | Frontend and backend deploy under the intended verified domain |
 | Public publication | Publisher-named workload, verified publisher, support/privacy/terms evidence, Marketplace offer | Fabric publisher, tenant admin, Partner Center roles | Package reaches the intended selected, Preview, or GA stage |
 
-Keep the accounts distinct. Tenant administrators enable settings, capacity or workspace administrators control access and assignment, publishers manage applications and packages, and standard users create and open items for acceptance testing.
+Tenant administrators enable settings, workspace or capacity administrators control access, publishers manage applications and packages, and standard users exercise the item.
 
-Snippet labels have a precise meaning:
-
-- **Teaching example** explains one boundary or decision and omits surrounding production concerns.
-- **Production pattern** shows a reusable security or operational shape, but still needs application-specific design.
-- **Current reference, verified September 2026** records a command or platform detail that should be rechecked against current documentation.
-
-Install Python dependencies by scenario rather than giving every reader the production stack.
-
-> **Teaching example.** Base API, token-validation, and test dependencies.
+Install the base Python dependencies only if you follow the service examples:
 
 ```bash
 python -m venv .venv
@@ -188,30 +165,27 @@ pip install fastapi "uvicorn[standard]" pydantic \
             "pyjwt[crypto]" requests pandas pytest
 ```
 
-> **Production pattern.** Add these packages only for the Azure-hosted identity, Key Vault, and telemetry examples.
+Add the Azure packages only for the identity, Key Vault, and telemetry examples:
 
 ```bash
 pip install azure-identity azure-keyvault-secrets \
             azure-monitor-opentelemetry
 ```
 
-A practical note on the snippets: the TypeScript examples run in the browser through the toolkit SDK. The Python examples run in publisher-hosted services called over HTTPS. Each snippet states which side of the boundary it belongs to.
+The TypeScript examples run in the browser through the toolkit SDK. The Python examples run in publisher-hosted services over HTTPS.
 
-### A source-inspected first-run path
+### First run
 
-Once the common and local-development prerequisites are satisfied, use the following path. It was checked against the pinned source and documentation, but it was not executed in a Fabric tenant.
+After the common and local prerequisites are ready:
 
-| Step | Actor and access | Starting directory | Command or action | Adapt | Expected evidence |
-|---|---|---|---|---|---|
-| Clone | Developer with Git access | Parent directory for the checkout | `git clone https://github.com/microsoft/fabric-extensibility-toolkit` | Checkout the pinned commit for reproducibility | Repository exists at the expected commit |
-| Configure | Developer allowed to create or reuse the required Entra apps and use the target workspace | `fabric-extensibility-toolkit/scripts/Setup` | `pwsh ./SetupWorkload.ps1 -WorkloadName "Org.YourWorkload"` | Workload name, optional display name, app IDs, development workspace, and workload version | Entra/configuration artifacts are created and the script reaches its final package-build step |
-| Serve | Developer | `fabric-extensibility-toolkit/scripts/Run` | `pwsh ./StartDevServer.ps1` | No script parameters | Dev Server reports that the SPA and development manifests are available |
-| Register | Same developer, with personal Fabric Developer Mode enabled | `fabric-extensibility-toolkit/scripts/Run` in a second terminal | `pwsh ./StartDevGateway.ps1` | Boolean `InteractiveLogin`, default `$true`. Linux requires `-InteractiveLogin $false` at the pinned commit | Dev Gateway reports registration with Fabric |
-| Open | Standard test user who can use the development workspace | Fabric portal | Open the starter kit's Hello World item | Workspace on an F, P, or Trial capacity and browser Local Network Access | The item editor loads inside Fabric |
+1. Clone the toolkit and checkout the pinned commit.
+2. From `scripts/Setup`, run `pwsh ./SetupWorkload.ps1 -WorkloadName "Org.YourWorkload"`.
+3. From `scripts/Run`, start `StartDevServer.ps1`, then start `StartDevGateway.ps1` in a second terminal.
+4. Enable personal Fabric Developer Mode and open the Hello World item in the development workspace.
 
-> **Pinned-source warning.** At commit `dacab1b...`, `SetupWorkload.ps1` ends by passing an unsupported `-Force` parameter to `BuildManifestPackage.ps1`. The entry point and its parameters are source-verified, but the sequence is not execution-verified. Recheck the current script before onboarding a developer and record any upstream correction or local disposition.
+> At the pinned commit, `SetupWorkload.ps1` passes an unsupported `-Force` parameter to the package build. Check the current script before onboarding a developer. Appendix B contains the exact signatures, platform notes, and expected outputs.
 
-If Hello World does not load, check the settings, browser Local Network Access, environment files, and both local processes before changing code.
+If Hello World does not load, check the tenant settings, browser Local Network Access, environment files, and both local processes before changing code.
 
 ### Common pitfalls
 
@@ -243,17 +217,13 @@ Appendix E expands this into a boundary-based diagnostic reference with expected
 
 Most ISVs and SDCs do not start from an empty repository. They already have a service, an API, domain logic, support processes, and customers. The question is whether that product should remain a separate destination or become part of the place where Fabric users already work with data. A workload provides the second option.
 
-> **Running example: GreenGrid.** GreenGrid already operates an energy-scoring SaaS. It wants Fabric customers to score approved data from OneLake without moving the scoring logic and intellectual property into the customer's tenant. The example returns throughout the architecture and development sections before becoming the worked implementation in section 9.
+GreenGrid provides the running example: an energy-scoring SaaS that works with approved OneLake data while its scoring logic stays in the publisher's cloud. Section 9 turns that scenario into a worked implementation.
 
 ### 1.1 The ISV business case: bring your service to Fabric data
 
-A workload changes where the customer meets the product. The user opens an item in a Fabric workspace instead of switching to another portal, exporting data, and rebuilding context in a separate application. The ISV can reuse the service it already operates rather than deploying a dedicated copy for each customer. The workload becomes the product surface inside Fabric. The SaaS or PaaS remains the execution surface behind it.
+For an ISV, a workload creates a route to customers whose data and analytics teams already work in Fabric. Users can configure the solution, work with approved data, and inspect results from a workspace they already use. The commercial opportunity is to reduce the effort required to demonstrate value and make adoption easier for the customer segment the product serves.
 
-This creates a practical bridge between two estates:
-
-- Fabric holds the customer's workspaces, items, identity context, and OneLake data.
-- The publisher keeps its algorithms, operational services, and product roadmap in its own cloud.
-- The workload joins them through declared APIs, scoped tokens, and an item the customer can assign to the right capacities or workspaces.
+An established vendor can reuse its service and domain logic behind a Fabric-facing experience. An SDC may start with a solution it has built repeatedly for clients. Turning that work into a reusable workload can support implementation services, maintenance, and recurring licensing, but it also requires product ownership, versioning, documentation, and support.
 
 ```mermaid
 flowchart LR
@@ -279,21 +249,28 @@ flowchart LR
     style IP fill:#e36209,stroke:#b14e00,color:#ffffff
 ```
 
-The model opens a repeatable route to more than one customer. An internal `Org.[Name]` package can serve one organization. A publisher-named workload can be tested with selected tenants, up to the current limit of twenty, before the publisher requests Preview and GA. Public distribution also requires the current Fabric publishing checks and a Microsoft Marketplace SaaS offer in Partner Center. The Workload Hub handles discovery, consent, and assignment inside Fabric. Microsoft Marketplace handles the commercial listing and licensing options.
+The investment should be tied to a customer problem and measured through a pilot:
 
-This route does not remove the normal work of selling and operating software. Customers still assess security, residency, support, pricing, and the data the publisher receives. The business advantage is narrower and more useful: the ISV can bring one maintained service to Fabric customers through a consistent product surface, without surrendering its intellectual property or rebuilding the product inside every tenant.
+| Signal | What it tests |
+|---|---|
+| Time to the first useful result | Whether the Fabric experience makes the product easier to evaluate |
+| Integration effort per deployment | Whether the item and its contracts reduce repeated customer work |
+| Active use after the pilot | Whether the workload becomes part of a recurring workflow |
+| Pilot conversion and support cost | Whether adoption can become a sustainable product motion |
+
+If customers only need an API connection or a scheduled transformation, these gains may not justify a dedicated workload. Fabric distribution and Microsoft Marketplace can support discovery, evaluation, and acquisition, depending on the publishing and offer model. Microsoft co-sell is a separate commercial process with its own [eligibility requirements](https://learn.microsoft.com/en-us/partner-center/referrals/co-sell-requirements). The publisher still owns customer targeting, pricing, and the work required to convert interest into adoption.
 
 ### 1.2 What Fabric gives you, and what a workload adds
 
-Fabric is organized around workspaces and items, with OneLake as the shared data plane. A workload adds publisher-defined item types and a publisher-hosted web experience to that model. Users can create the item in a workspace, while the publisher connects it to the Fabric capabilities the product needs.
+Fabric is organized around workspaces and items, with OneLake as the shared data plane. A workload adds a publisher-defined item and experience to that model. The user gains one place to configure the product, work with permitted data, and return to its results.
 
-That native behavior is not a blanket inheritance. Each catalog, monitoring, Git, deployment, job, lifecycle, or protection claim needs its own configuration and validation. Sections 2 and 6 separate item definitions from business data. Section 12 covers the publisher's data and protection responsibilities.
+Catalog, monitoring, Git, deployment, jobs, lifecycle, and protection still require their own declarations or implementation. Appendix A lists those capabilities and their limits.
 
 ### 1.3 The toolkit, when to use it, and its limits
 
 The Extensibility Toolkit is the supported starting point for new workloads. It provides a starter project, the workload client SDK, setup and build scripts, and the local Dev Server and Dev Gateway loop. It is the current evolution of the older Workload Development Kit.
 
-It fits when you need a custom item and a publisher-hosted user experience inside Fabric: a domain-specific authoring tool, a governance console, an industry workflow, or an operational application that works with Fabric data. The baseline architecture is frontend-first. The tagged [v2026.03 release notes](https://github.com/microsoft/fabric-extensibility-toolkit/blob/fbdc891e83d14fbfefd4f7e7e27194fd97f153ed/docs/ReleaseNotes/2026/v2026.03.md#L3-L16) describe production-ready remote hosting, while the current [general publishing requirements](https://github.com/MicrosoftDocs/fabric-docs/blob/5156dc524b5f03f820d4d6b55aa69caeded0cce5/docs/extensibility-toolkit/publishing-requirements-general.md#L113-L122) still contain narrower backend language. Treat remote acceptance as a target-stage verification item before promising the capability.
+It fits when users need a custom item with its own editor and lifecycle: a domain-specific authoring tool, governance console, industry workflow, or operational application. The baseline is frontend-first. Remote hosting exists in the toolkit, but its publication status must be confirmed for the intended stage. Appendix F records the current source discrepancy.
 
 The toolkit does not run arbitrary server code inside a general-purpose Fabric runtime, bypass capacity quotas, or remove the publisher's responsibility for hosting and support. Development requires a supported F, P, or Trial capacity. Power BI Pro alone is not enough.
 
@@ -363,9 +340,7 @@ These relationships use different contracts:
 | Fabric → publisher remote endpoint | Fabric service | `SubjectAndAppToken1.0`, with a required app token and an operation-dependent subject token | Jobs and item lifecycle callbacks |
 | Publisher backend → target resource | Publisher service | OBO, backend application, or managed identity according to the target | Downstream user or service operation |
 
-The [remote authentication contract](https://github.com/MicrosoftDocs/fabric-docs/blob/bd2c3018e8ee6feb445c2868d83123641a58f946/docs/extensibility-toolkit/authentication-remote.md#L31-L47) applies to Fabric-initiated remote endpoint calls. Its documented form is `SubjectAndAppToken1.0 subjectToken="<delegated>", appToken="<app-only>"`. Validate the app token on every call. The subject token can be absent for service-principal calls, deletion, and some scheduled or automated operations, so authorize those paths as explicit app-only operations rather than assuming user context.
-
-Lifecycle requests also carry `ActivityId`, `RequestId`, and `x-ms-client-tenant-id` under the [lifecycle request contract](https://github.com/MicrosoftDocs/fabric-docs/blob/a7bd3bc889b21e925ab40fd9206cd6a7d89a49e3/docs/extensibility-toolkit/how-to-enable-remote-item-lifecycle.md#L91-L132). The remote-auth page contains one sample using `ms-client-tenant-id`, but the lifecycle documentation, generated REST contract, and pinned toolkit use `x-ms-client-tenant-id`. This contract is not the contract for every API the iframe calls.
+Section 4 defines the token and header rules for these calls. Appendix F records the version-specific sources and discrepancies.
 
 The manifest tells Fabric where to load the frontend and which item capabilities exist. The SDK provides the supported bridge for theme, navigation, dialogs, notifications, item operations, and token acquisition. Code inside the iframe should use that contract rather than reaching into the portal DOM or assuming internal Fabric routes.
 
@@ -408,7 +383,7 @@ sequenceDiagram
     W-->>U: Render the screen
 ```
 
-Every later concern (a manifest that must declare the route, a scope the token must carry, a boundary the iframe enforces) is a step in this sequence. The diagnostics section returns to it boundary by boundary: open, bootstrap, token, call, render. Ask which steps produced observable evidence. A blank editor still requires network and browser-console checks. A refused API call can fail at transport, authentication, authorization, or the service itself. A screen with no rows can represent a valid empty result, a failed request, or stale UI state. Section 8 turns those possibilities into discriminating tests.
+Use the sequence as a diagnostic map: open, bootstrap, token, call, render. Section 8 shows how to identify the last step that produced evidence without treating one symptom as proof of one cause.
 
 ## 3. The manifest package: the contract with Fabric
 
@@ -416,7 +391,7 @@ Every later concern (a manifest that must declare the route, a scope the token m
 
 A workload package contains several declarations with different jobs. `WorkloadManifest.xml` defines the workload identity, hosting mode, Entra applications, and service endpoints. `Product.json` holds product-level presentation and support metadata. Each item type then has two files: an XML platform definition and a JSON frontend definition.
 
-> **Current reference, verified September 2026.** Source layout at the pinned toolkit commit.
+The pinned toolkit uses this source layout:
 
 ```text
 Workload/Manifest/
@@ -435,7 +410,7 @@ Workload/Manifest/
 
 The build selects and flattens the manifest files into two package segments:
 
-> **Current reference, verified September 2026.** Built `.nupkg` workload payload. NuGet bookkeeping is omitted.
+The build flattens those files into the following `.nupkg` payload. NuGet bookkeeping is omitted:
 
 ```text
 BE/
@@ -465,9 +440,7 @@ Do not confuse item-type manifests with an item-instance definition:
 
 The item-definition API represents one instance as parts with `path`, `payload`, and `payloadType`. Workload-owned parts hold functional state, while Fabric can own platform material such as `.platform`. Those parts are not the XML/JSON item-type manifest pair. See the [item-definition contract](https://github.com/MicrosoftDocs/fabric-docs/blob/ae59e7adae05c1a99d9c4a9505e382d774859bd0/docs/extensibility-toolkit/how-to-store-item-definition.md#L14-L43).
 
-A simplified frontend-hosting manifest looks like this:
-
-> **Teaching example.** The current schema contains more fields. Start from the official starter-kit manifest rather than copying this excerpt as a complete package.
+A simplified frontend-hosting manifest looks like this. It omits required fields, so start from the current starter-kit manifest:
 
 ```xml
 <WorkloadManifestConfiguration SchemaVersion="2.0.0">
@@ -488,19 +461,7 @@ A simplified frontend-hosting manifest looks like this:
 </WorkloadManifestConfiguration>
 ```
 
-The package has hard limits that should shape the product before packaging day:
-
-> **Current platform behavior, verified September 2026.** The following values come from the current [manifest-package documentation](https://learn.microsoft.com/en-us/fabric/extensibility-toolkit/manifest-overview#package-limits) and can change independently of the architectural model.
-
-| Limit | Current maximum |
-|---|---:|
-| Item types in one package | 10 |
-| Total package size | 20 MB |
-| Packaged assets | 15 |
-| Size per asset | 1.5 MB |
-| `Product.json` | 50 KB |
-
-Package assets are currently limited to JPEG, JPG, and PNG by the manifest-package guidance. Item filenames also have length and character restrictions. Check the current manifest documentation before adding item types or assets near these limits.
+Package limits affect item count, asset count and size, `Product.json`, and item filenames. Appendix A keeps the current values and sources in one place.
 
 The package declares what Fabric needs to load and present the workload. It does not contain the running frontend or backend, which remain at the declared publisher endpoints. Every upload needs a package version Fabric has not seen before.
 
@@ -526,7 +487,7 @@ A publisher name is reserved permanently when it is confirmed during the first u
 
 The workload client exposes one acquisition method, but it does not produce one universal bearer token. The frontend calls `acquireFrontendAccessToken` with the scopes for a specific resource. The documented result object exposes the bearer value through its `token` property. Fabric APIs, OneLake Storage, Microsoft Graph, and a publisher API have different audiences, so each needs a token requested for its own scopes.
 
-> **Teaching example.** This demonstrates resource-specific acquisition and omits consent handling, token caching, retries, and application authorization.
+The client below shows resource-specific acquisition. Consent handling, retries, caching, and resource authorization remain application concerns.
 
 ```ts
 import { WorkloadClientAPI } from "@ms-fabric/workload-client";
@@ -557,7 +518,7 @@ Define narrow scopes for a publisher API, such as separate read and write operat
 
 Token version determines the audience contract. For a v2 access token, `aud` is the client ID of the target API. A v1 token can use a client ID or resource URI according to the resource configuration. Pair the expected audience with the matching issuer and version instead of treating the Application ID URI as a universal audience. See the [Entra access-token claims reference](https://learn.microsoft.com/en-us/entra/identity-platform/access-token-claims-reference).
 
-> **Teaching example.** This demonstrates the trust boundary. A production implementation also needs tenant policy, authorization beyond scopes, key-cache behavior, failure handling, telemetry, and security review.
+The validator below is deliberately single-tenant and v2-specific. A production service also needs tenant policy, resource authorization, key-cache behavior, telemetry, and security review.
 
 ```python
 # auth.py - validate a Fabric/Entra bearer token in a Python backend.
@@ -596,9 +557,7 @@ def require_scope(required: str):
     return dependency
 ```
 
-Used on a route, it makes the access rule explicit at the edge of the service:
-
-> **Teaching example.** Route-level scope enforcement for the validator above.
+Use the dependency at the route boundary:
 
 ```python
 from fastapi import FastAPI, Depends
@@ -640,11 +599,7 @@ Three identities may therefore appear in one product: the signed-in user represe
 
 ### 5.1 The starter kit, setup script, and Entra applications
 
-Development starts by cloning the toolkit's starter kit, which includes the web application, manifest package, and setup scripts. Microsoft Learn documents `Setup.ps1` from the repository root. The pinned repository marks that file as a compatibility wrapper and names `SetupWorkload.ps1` as the implementation entry point. Record which source and commit a team follows.
-
-> **Current platform behavior, verified September 2026.** [`SetupWorkload.ps1`](https://github.com/microsoft/fabric-extensibility-toolkit/blob/dacab1b391d03010ba61a0446126d05515c487f0/scripts/Setup/SetupWorkload.ps1#L39-L61) accepts `WorkloadName`, `WorkloadDisplayName`, `FrontendAppId`, `BackendAppId`, `DevWorkspaceId`, Boolean `Force`, and `WorkloadVersion`. At the pinned commit, its [final build handoff](https://github.com/microsoft/fabric-extensibility-toolkit/blob/dacab1b391d03010ba61a0446126d05515c487f0/scripts/Setup/SetupWorkload.ps1#L287-L294) passes `-Force` to a [build script](https://github.com/microsoft/fabric-extensibility-toolkit/blob/dacab1b391d03010ba61a0446126d05515c487f0/scripts/Build/BuildManifestPackage.ps1#L1-L5) that does not declare that parameter. The command is source-inspected, not execution-verified.
-
-> **Current reference, verified September 2026.** Workload setup command.
+Clone the starter kit, then run its setup from `scripts/Setup`:
 
 ```powershell
 git clone https://github.com/microsoft/fabric-extensibility-toolkit
@@ -652,29 +607,27 @@ cd fabric-extensibility-toolkit/scripts/Setup
 pwsh ./SetupWorkload.ps1 -WorkloadName "Org.YourWorkload"
 ```
 
-An Entra app is created even though development is local because the Dev Gateway handles routing, not identity. The workload still requests real delegated tokens for the signed-in developer. Only the frontend hosting location is local.
-
-The script is intended to write environment files for the workspace, workload, and Entra applications, then prepare the local gateway and manifest package. When the portal does not show the workload, compare those files with the active workspace and app registrations before changing application code. Resolve the pinned final-build mismatch before treating setup as successful.
+The setup creates or reuses the Entra applications and writes the local environment. Dev Gateway handles routing, not identity, so the workload still requests real delegated tokens. Appendix B lists every parameter and the known issue in the pinned package-build handoff.
 
 ### 5.2 Dev Server, Dev Gateway, and the Hello World checkpoint
 
-Two long-running processes drive local development. Dev Server hosts the SPA, assets, and development manifest endpoints. Dev Gateway registers the local instance and points Fabric to Dev Server. It does not host the application or provide identity.
+Two long-running processes drive local development. Dev Server hosts the SPA and development manifests. Dev Gateway registers the local instance and points Fabric to Dev Server.
 
-> **Current reference, verified September 2026.** Terminal 1 starts Dev Server.
+Start Dev Server in the first terminal:
 
 ```powershell
 cd scripts/Run
 pwsh ./StartDevServer.ps1
 ```
 
-> **Current reference, verified September 2026.** Terminal 2 starts Dev Gateway.
+Start Dev Gateway in the second:
 
 ```powershell
 cd scripts/Run
 pwsh ./StartDevGateway.ps1
 ```
 
-`StartDevServer.ps1` declares no parameters. `StartDevGateway.ps1` declares Boolean `InteractiveLogin`, defaulting to `$true`, and always rebuilds the `dev` manifest. At the pinned commit, ordinary Linux use needs `-InteractiveLogin $false` so the script obtains an Azure CLI token. Appendix B records the source links and platform caveats.
+Appendix B records the script parameters and the Linux login flag.
 
 ```mermaid
 flowchart LR
@@ -698,8 +651,6 @@ flowchart LR
 
 Current setup guidance names three tenant settings:
 
-> **Current platform behavior, verified September 2026.** Tenant-setting names and browser local-network behavior are operational details. Recheck them when onboarding a new development tenant.
-
 1. **Capacity admins and contributors can add and remove additional workloads**
 2. **Workspace admins can develop partner workloads**
 3. **Users can see and work with additional workloads not validated by Microsoft**
@@ -712,20 +663,16 @@ Prove the environment with the Hello World item before adding your own type. If 
 
 ### 6.1 The item, its editor, and how it surfaces
 
-A new item type starts from the pinned generator in `scripts/Setup`. `ItemName` is required unless the script prompts for it. The optional `srcItemName` selects the item to copy and defaults to `HelloWorld`.
-
-> **Current reference, verified September 2026.** Run from `scripts/Setup`. The exact parameter name is `srcItemName`, with that casing.
+A new item type starts from the generator in `scripts/Setup`. `ItemName` names the new type, while optional `srcItemName` selects the source item and defaults to `HelloWorld`:
 
 ```powershell
 cd scripts/Setup
 pwsh ./CreateNewItem.ps1 -ItemName "Forecast" -srcItemName "HelloWorld"
 ```
 
-The generator copies the item structure, but it does not finish the integration. Update `ITEM_NAMES`, `Product.json`, the locale entries, and `App.tsx` before expecting the type to appear and route correctly. The pinned [script signature](https://github.com/microsoft/fabric-extensibility-toolkit/blob/dacab1b391d03010ba61a0446126d05515c487f0/scripts/Setup/CreateNewItem.ps1#L1-L20), [manual follow-up](https://github.com/microsoft/fabric-extensibility-toolkit/blob/dacab1b391d03010ba61a0446126d05515c487f0/scripts/Setup/CreateNewItem.ps1#L157-L192), and [official item tutorial](https://github.com/MicrosoftDocs/fabric-docs/blob/5156dc524b5f03f820d4d6b55aa69caeded0cce5/docs/extensibility-toolkit/tutorial-create-new-fabric-item.md#L165-L181) define this path.
+The result is a copied item structure. Update `ITEM_NAMES`, `Product.json`, the locale entries, and `App.tsx` before opening it in Fabric. Appendix B keeps the exact script contract.
 
-The starter kit normally gives you a definition model, an editor, empty and default views, and ribbon actions. The definition holds compact control-plane configuration, not the item's large business data:
-
-> **Teaching example.** Small definition model only. Serialization and validation remain application-specific.
+The starter kit gives you a definition model, editor, views, and ribbon actions. Keep the definition compact:
 
 ```ts
 // ForecastItemDefinition.ts - compact, human-readable control-plane configuration.
@@ -741,9 +688,7 @@ export const DEFAULT_FORECAST: ForecastItemDefinition = {
 };
 ```
 
-Fabric provides the item creation surface, and your package declares how the type appears there. The editor route then maps the Fabric item identifier to your component:
-
-> **Teaching example.** Route shape only. Use the router and controller structure from the installed starter kit.
+Fabric provides the item creation surface. The editor route maps the Fabric item identifier to your component:
 
 ```tsx
 // App.tsx - register the editor route so the host's navigation matches a component.
@@ -752,9 +697,7 @@ Fabric provides the item creation surface, and your package declares how the typ
 </Route>
 ```
 
-The current starter kit updates definition parts through the item CRUD API. Keep the serialized parts small, textual, and suitable for review in Git:
-
-> **Teaching example.** Verify the exact method and definition-part types in the installed SDK. The pinned repository declares the range `^3.1.1` but does not lock one resolved version.
+The starter kit updates definition parts through the item CRUD API. Verify the exact types in the installed SDK:
 
 ```ts
 import { WorkloadClientAPI } from "@ms-fabric/workload-client";
@@ -776,9 +719,7 @@ Keep one development item open while Dev Server watches the frontend. That gives
 
 A workload often needs data from OneLake. Keep the data source behind a function so the screen does not care whether development uses seed data or a real file. Request a Storage-scoped delegated token for OneLake. Do not reuse a Fabric API token with a different audience.
 
-In the browser, the frontend reads a OneLake file with the user's token:
-
-> **Teaching example.** Direct OneLake read after acquiring a Storage-scoped delegated token.
+In the browser, the frontend reads a OneLake file with the user's Storage-scoped token:
 
 ```ts
 // Read a CSV from OneLake in the frontend, as the signed-in user.
@@ -799,9 +740,7 @@ export async function readSitesCsv(
 }
 ```
 
-When the work belongs on a server, the backend must obtain a OneLake token with the correct audience. In a user-delegated flow that normally means an OBO exchange, not forwarding the incoming publisher-API token directly to Storage. The resulting OneLake token can then be used by a Python reader:
-
-> **Teaching example.** The caller supplies an already acquired OneLake token. OBO, retries, streaming, and large-file handling are outside this function.
+When the work belongs on a server, the backend normally exchanges the incoming user token through OBO for a OneLake token. The reader below assumes that exchange has already happened. Production code also needs retries, streaming, and large-file handling:
 
 ```python
 # onelake.py - read a OneLake CSV in a Python backend, as the calling user.
@@ -824,15 +763,9 @@ The item definition can hold small settings such as a horizon, a source item ide
 
 A settings dialog, About page, localization, catalog metadata, and monitoring integration each require their own manifest or frontend work. Add only the capabilities you implement and test.
 
-A remote job is declared through the item manifest. Fabric schedules and monitors the job, while the publisher endpoint performs the work and reports status. Configured jobs appear in Monitoring Hub. Filter integration, cancellation, retry, detail views, and Recent Runs need additional declarations or handlers. The current repository provides `SwitchToRemoteHosting.ps1` to change the base frontend-hosting project to the remote schema.
+A remote job is declared through the item manifest. Fabric schedules and monitors it, while the publisher endpoint executes the work and reports status. Cancellation, retry, detail views, and Recent Runs need additional declarations or handlers. The exact job route still differs across first-party samples, so confirm it for the intended publication stage. Appendix A covers capabilities, and Appendix B covers the remote-hosting script.
 
-Current first-party sources expose different job route shapes, and the generic remote-endpoint page still contains an incomplete specification. Treat the exact job URL contract as unresolved until the generated API specification, active validator, or Fabric publishing team confirms it for the target stage. The capability matrix in Appendix A links the conflicting sources. Remote-hosting implementation and publication acceptance are also separate questions.
-
-> **Current platform behavior, verified September 2026.** The pinned `SwitchToRemoteHosting.ps1` accepts `WorkloadRoot`, `BackendAppId`, `BackendAudience`, `BackendUrl`, `TenantId`, `EnableOneLakeLogging`, `BackendClientSecret`, and switch `Force`. Static inspection found that it updates `.env.dev` and `.env.test` but not `.env.prod`, writes the backend secret in plaintext to those local files, and migrates only `HelloWorldItem.xml` to schema `2.100.0`. Review every generated change, keep the environment files out of source control, and migrate each item manifest explicitly. See the [signature](https://github.com/microsoft/fabric-extensibility-toolkit/blob/dacab1b391d03010ba61a0446126d05515c487f0/scripts/Setup/SwitchToRemoteHosting.ps1#L65-L82), [environment updates](https://github.com/microsoft/fabric-extensibility-toolkit/blob/dacab1b391d03010ba61a0446126d05515c487f0/scripts/Setup/SwitchToRemoteHosting.ps1#L699-L805), and [item migration](https://github.com/microsoft/fabric-extensibility-toolkit/blob/dacab1b391d03010ba61a0446126d05515c487f0/scripts/Setup/SwitchToRemoteHosting.ps1#L326-L342).
-
-The Python below shows execution logic only. It is not the Fabric remote-job protocol, and its in-memory status store is unsuitable for production:
-
-> **Teaching example.** Local execution shape only, not a production job service.
+The Python below shows execution logic, not the Fabric remote-job protocol. Its in-memory status store is unsuitable for production:
 
 ```python
 # jobs.py - a server-side job the workload starts and polls.
@@ -866,11 +799,11 @@ Remote lifecycle notifications extend beyond create, update, and delete. Current
 
 ## 7. Developing with AI assistance
 
-The toolkit repository includes AI-oriented context, procedures, Copilot instructions, and a custom `@fabric` agent. These files can speed up scaffolding and explain repository conventions. They are also versioned documentation, and some currently lag behind Microsoft Learn or describe commands the repository does not ship. Use them as project guidance, then verify the result against the code, current Learn pages, and the build scripts present in the pinned repository.
+The toolkit repository includes context files, task procedures, Copilot instructions, and an `@fabric` agent. They help an assistant navigate the project, but the checked-out SDK types, manifests, scripts, and current Microsoft Learn pages remain the contracts to verify.
 
 > **Stable concept: AI output is a proposal, not platform truth.**
 
-Use the assistant through a repeatable developer workflow:
+Use a short reviewable workflow:
 
 | Step | Developer action | Expected result |
 |---|---|---|
@@ -880,72 +813,15 @@ Use the assistant through a repeatable developer workflow:
 | Review | Inspect the diff, data flows, scopes, error behavior, and generated assumptions | Product and security decisions remain human-owned |
 | Verify | Run the four gates below and record the evidence | A result that can be accepted or rejected |
 
-Validate agent-authored work through four gates:
-
-| Gate | Check |
-|---|---|
-| **SDK** | The method and type exist in the installed package version |
-| **Manifests** | Workload, product, item XML, item JSON, locale, routes, and assets agree |
-| **Build** | The real repository scripts build the frontend and package with local schema checks |
-| **Runtime** | The item opens in Fabric, requests the intended token audience, and handles errors correctly |
-
-> The repository's `.ai` publishing guidance still contains older tenant limits and registration steps. Treat Microsoft Learn as the authority when the two disagree.
-
-```mermaid
-flowchart TB
-    DEVR["Developer request"]
-    subgraph KIT["Versioned repository guidance"]
-        direction TB
-        CTX[".ai/context<br/>fabric + workload knowledge"]
-        CMD[".ai/commands<br/>task procedures"]
-        COP[".github/copilot<br/>agent + instructions"]
-    end
-    LEARN["Microsoft Learn<br/>current product authority"]
-    MCP["Optional community UX MCP<br/>referenced by the toolkit"]
-    OUT["Proposed code and repository changes"]
-    DEVR --> COP
-    COP --> CTX
-    COP --> CMD
-    COP --> LEARN
-    COP -.->|"optional UX lookup"| MCP
-    CMD --> OUT
-    LEARN --> OUT
-    style DEVR fill:#6e5494,stroke:#553c7b,color:#ffffff
-    style KIT fill:#e8f6ec,stroke:#2ea44f,color:#1b7a37
-    style CTX fill:#1565c0,stroke:#0d47a1,color:#ffffff
-    style CMD fill:#2ea44f,stroke:#1b7a37,color:#ffffff
-    style COP fill:#8957e5,stroke:#6e40c9,color:#ffffff
-    style MCP fill:#0d9488,stroke:#0a6b62,color:#ffffff
-    style LEARN fill:#1565c0,stroke:#0d47a1,color:#ffffff
-    style OUT fill:#e36209,stroke:#b14e00,color:#ffffff
-```
+The four gates are straightforward: check the SDK method and type, confirm that every manifest and route agrees, run the real build scripts, then open the item in Fabric and exercise its identity and error paths.
 
 ### 7.1 Repository guidance: useful, mutable, and versioned
 
-The `.ai/` folder is plain Markdown. Its `context/` files explain Fabric and the project, while `commands/` describe repeatable item and workload tasks. An assistant can read those files in any environment that exposes the repository, but support for custom agents, automatic instructions, and tool calls still depends on the host.
-
-> **Current reference, verified September 2026.** AI-oriented folders present in the audited toolkit repository.
-
-```text
-.ai/
-├── context/
-│   ├── fabric.md            # the platform: OneLake, items, capacities, APIs
-│   └── fabric-workload.md   # this project: structure and conventions
-└── commands/
-    ├── item/                # createItem, deleteItem, renameItem
-    └── workload/            # runWorkload, updateWorkload, deployWorkload,
-                             # publishWorkload, cleanWorkload
-```
-
-The procedures are useful because they name the files and checks a task should touch. They are not executable product commands. If an instruction says to run a `fabric ...` command that is not present in the repository or current CLI documentation, stop and use the actual PowerShell scripts or documented API instead.
+The `.ai/` files explain the platform, project structure, and common tasks. They are guidance, not executable product commands. If an instruction names a command that the repository does not ship, use the actual script or documented API. Appendix C contains the file map and authority order.
 
 ### 7.2 The Copilot agent and the optional community UX MCP
 
-The GitHub layer adds `copilot-instructions.md`, scoped instruction files, and the *Microsoft Fabric Development Assistant* exposed as `@fabric`. The agent is useful for navigating the starter kit and applying its conventions. It does not turn every sentence in `.ai/` into a supported platform command.
-
-Ask for a bounded repository change and make the expected verification explicit:
-
-> **Teaching example.** Prompt structure for a repository task, not a guarantee about generated output.
+Ask for a bounded repository change and name the expected verification:
 
 ```text
 @fabric create a Forecast item type with a horizon setting.
@@ -953,42 +829,21 @@ Use the current item generator and manifest pair, update localization and routes
 then run Dev Server and Dev Gateway and verify the item opens in Fabric.
 ```
 
-The request leaves product decisions with the developer. The agent can scaffold and wire the item, but it should not invent the data contract, permission model, or user experience.
-
-The toolkit repository also references a Fabric UX MCP implementation that can index UX material and expose an `askFabricDocs` tool. That implementation lives in a community GitHub repository, not the Microsoft organization, and it is not a Microsoft-hosted Fabric service. Review its code, data source, local dependencies, and update cadence before adding it to a development environment.
-
-> **Teaching example.** Placeholder MCP configuration. Replace it only after reviewing the referenced community implementation.
-
-```json
-{
-  "mcpServers": {
-    "fabric-ux-community": {
-      "command": "<local command from the reviewed community repository>",
-      "args": []
-    }
-  }
-}
-```
-
-The MCP server can help retrieve UX guidance. It does not certify generated UI or replace accessibility, manifest, and runtime testing.
+The agent can scaffold and wire the item, but the developer still owns the data contract, permission model, and user experience. The optional Fabric UX MCP referenced by the toolkit is community-maintained. Its configuration and review points are in Appendix C.
 
 ### 7.3 What it generates, and keeping it honest
 
-The agent can scaffold the paired item manifests, editor, views, ribbon, routes, locale entries, and product metadata. It can also draft resource-scoped token calls and follow existing Fluent UI patterns. Review every generated API name against the installed SDK types and every publishing claim against current Microsoft Learn.
-
-Generation does not change the definition of done. The item must open through Dev Gateway, the manifest package must pass local schema checks, the frontend must request the right token audience, and any published workload must pass the separate publishing validation and review. Use the agent for mechanical work. Keep product scope, data boundaries, permissions, and release approval with people who own them.
+An agent can scaffold manifests, editor views, routes, locale entries, and token calls. Accept the change only when the item opens through Dev Gateway, the package passes local checks, the frontend requests the right audience, and the diff preserves the intended data and permission boundaries.
 
 ## 8. Diagnostics and debugging
 
-A workload is a chain of boundaries, and most of the work of getting one running is confirming each is sound, by understanding what each carries, not by memorizing symptoms.
+A workload is a chain of boundaries. Diagnose it from observed requests, responses, and browser errors rather than from symptom shortcuts.
 
 ### 8.1 Reading the chain, and the token and manifest boundaries
 
 The reference path is the one Hello World proved: Dev Server, Dev Gateway, the Fabric host, and the iframe. Use it as a comparison, not a verdict. If Hello World opens, the local path is more likely to be healthy, but the new item can still fail in routing, manifests, JavaScript, identity, authorization, transport, or data access.
 
-The token boundary starts with the target resource. Confirm the requested scopes, token audience, tenant and issuer policy, expiry, and the identity represented by the token. Then check the hosting-mode-specific redirects and application registrations, including `Fabric.Extend`. Log the precise validation failure on the server, but return a generic authentication error to the caller:
-
-> **Teaching example.** Boundary-aware diagnostics. Production logging must avoid token contents and personal data.
+For token failures, confirm scopes, audience, tenant and issuer policy, expiry, and the represented identity. Log the validation category on the server without logging the token or personal data:
 
 ```python
 # Log validation detail server-side; return a generic error to the caller.
@@ -1025,9 +880,7 @@ Appendix E provides the symptom, plausible causes, first test, expected observat
 
 Dev Gateway registers the local workload and points Fabric at Dev Server. It does not provide identity. While it is connected, the local workload can take precedence over an uploaded version for the configured workspaces. A blocked browser local-network permission can look like a stopped gateway, so test both before changing application code.
 
-The iframe boundary is a security feature. Use the host SDK and provide clear loading, empty, and error states when a call fails:
-
-> **Production pattern.** Distinct loading, empty, and error states for an item view.
+Use the host SDK and keep loading, empty, and error states distinct:
 
 ```tsx
 // Keep loading, empty, and failed requests distinct.
@@ -1037,9 +890,7 @@ if (data.length === 0) return <EmptyState title="Nothing here yet" />;
 return <DataGrid rows={data} />;
 ```
 
-Fabric-initiated operations can carry `ActivityId` and `RequestId`. Propagate them through publisher services when they are present. A browser call created directly by workload code does not automatically gain Fabric correlation headers, so create or forward correlation deliberately for that path.
-
-> **Production pattern.** Correlation middleware without request payload or token logging.
+Fabric-initiated operations can carry `ActivityId` and `RequestId`. Propagate them when present. Browser calls created by workload code need their own correlation:
 
 ```python
 # Propagate documented Fabric correlation IDs without logging request data.
@@ -1062,6 +913,8 @@ async def correlate(request: Request, call_next):
 ## 9. Illustration: GreenGrid
 
 This is a teaching sample. It isolates the development concepts and deliberately skips production concerns such as a verified domain, a managed identity, and a release pipeline. Read it as a way to see the previous sections in motion, not as a blueprint to copy into production.
+
+Reference implementation: [fredgis/FY27FabricMotion](https://github.com/fredgis/FY27FabricMotion).
 
 ### 9.1 What GreenGrid is
 
@@ -1099,7 +952,7 @@ The numbers on that screen come from the Python service and the seed data used i
 
 The SaaS is a small FastAPI service protected by the `require_scope` dependency from section 4.2. It takes a list of sites and returns a score, tier, and portfolio summary. The formula is deliberately simple. The useful part is the authenticated API boundary.
 
-> **Teaching example.** The scoring formula and route are intentionally small. Production adds tenant authorization, rate limits, resilient storage, operational controls, and a complete threat model.
+The scoring formula and route are intentionally small. Production adds tenant authorization, rate limits, resilient storage, operational controls, and a complete threat model.
 
 ```python
 # greengrid_saas.py - the scoring algorithm, owned by GreenGrid, hosted by GreenGrid.
@@ -1150,7 +1003,7 @@ def score(
 
 Run it locally with `uvicorn greengrid_saas:app --port 8787`. The health route confirms that the process is running:
 
-> **Teaching example.** Local health check only.
+The health route only confirms that the local process responds:
 
 ```bash
 curl -s http://localhost:8787/health
@@ -1158,7 +1011,7 @@ curl -s http://localhost:8787/health
 
 The `/score` route needs a real token for GreenGrid's API scope. The workload supplies that token in the next milestone. Unit tests can exercise the pure scoring function without weakening the API:
 
-> **Teaching example.** Unit tests for the deterministic scoring function.
+The deterministic scoring function can be tested directly:
 
 ```python
 # test_scoring.py
@@ -1181,7 +1034,7 @@ def test_low_renewable_site_is_warned():
 
 Because GreenGrid hosts this service itself, it ships as a small container. The workload needs the service URL and the Entra configuration for its delegated API scope, not the scoring source code.
 
-> **Teaching example.** Minimal container packaging. Production also needs a non-root runtime, image scanning, health probes, patching, and deployment policy.
+This container is intentionally minimal. Production also needs a non-root runtime, image scanning, health probes, patching, and deployment policy.
 
 ```dockerfile
 # Dockerfile - GreenGrid packages and hosts its own scoring service.
@@ -1198,7 +1051,7 @@ CMD ["uvicorn", "greengrid_saas:app", "--host", "0.0.0.0", "--port", "8787"]
 
 With the algorithm running, the workload is the join. Milestone 1 puts a working scorecard on screen using seed data for the sites but a real call to the SaaS for the scores, the shapes that cross the boundary, a client with one responsibility, and a screen that takes a `getSites` function rather than a fixed source:
 
-> **Teaching example.** Shared contracts and an authenticated publisher-API client.
+The frontend shares the service contract and acquires a token for the GreenGrid API:
 
 ```ts
 import { WorkloadClientAPI } from "@ms-fabric/workload-client";
@@ -1230,7 +1083,7 @@ export async function scorePortfolio(
 }
 ```
 
-> **Teaching example.** UI state and dependency injection around the authenticated scoring client.
+The scorecard keeps data loading behind `getSites` so the source can change later:
 
 ```tsx
 // Scorecard.tsx - driven by getSites, so the data source can change later.
@@ -1261,7 +1114,7 @@ The default view renders the screen with seed data, while the scores come from a
 
 The seed array stood in for customer data stored in a Lakehouse CSV at `Files/sites.csv`. The frontend requests a separate OneLake Storage token to read that file. Because the screen depends on `getSites`, the component and scoring client do not change.
 
-> **Teaching example.** Seed-data binding.
+The first milestone binds the scorecard to seed data:
 
 ```tsx
 <Scorecard
@@ -1270,7 +1123,7 @@ The seed array stood in for customer data stored in a Lakehouse CSV at `Files/si
 />
 ```
 
-> **Teaching example.** OneLake binding using the same component contract.
+The next milestone replaces only the data function:
 
 ```tsx
 <Scorecard
@@ -1328,17 +1181,13 @@ Domain and hosting come first because application registrations and manifest end
 
 A handful of things change together. The frontend uses HTTPS under the verified domain. Its framing policy must allow the supported Fabric and Power BI portal families. The backend permits the frontend origin through CORS. Each token must match its target resource, audience, and scopes. Every package upload uses a new version. The frontend acquires fresh tokens through the SDK rather than caching them past expiry.
 
-Two of these are header settings, and getting them wrong produces the confusing "works everywhere but not in Fabric" symptom. The frontend host has to allow framing by the portal, which is a Content-Security-Policy on the static site:
-
-> **Production pattern.** Start from the current publishing requirements and test both portal domain families.
+Two header settings often decide whether the product works inside Fabric. The frontend host must allow portal framing:
 
 ```text
 Content-Security-Policy: frame-ancestors https://*.fabric.microsoft.com https://*.powerbi.com;
 ```
 
-And a backend the frontend calls has to allow that origin, which in a FastAPI service is one middleware:
-
-> **Production pattern.** Restrict CORS to the actual production frontend origin and required methods.
+A backend called by that frontend must allow only the required origin and methods:
 
 ```python
 from fastapi.middleware.cors import CORSMiddleware
@@ -1357,19 +1206,13 @@ Treat the header as an example, not a permanent allow-list. Check the current pu
 
 ### 11.1 Hosting, the verified domain, and the resource ID
 
-A workload's frontend is the part Fabric loads in the iframe, served from your cloud over HTTPS. If the workload does server-side work, a backend runs alongside it, holding the logic and the privileged access while the frontend gets a token from the host and calls it. Publishing carries general requirements, and the first is a verified custom domain: the frontend must be a subdomain of a domain verified in your Entra tenant, and an `*.onmicrosoft.com` subdomain is not allowed. The verified domain drives the resource ID, which ties the frontend, backend, and identity together:
-
-> **Current reference, verified September 2026.** Resource-ID shape from the current hosting and authentication guidance.
+A workload's frontend is served from the publisher's cloud over HTTPS and loaded by Fabric in the iframe. A backend is optional. Public publishing requires a verified custom domain, and an `*.onmicrosoft.com` subdomain is not allowed. The resource ID ties the frontend, backend, and identity together:
 
 ```text
 https://<verified-domain>/<frontend>/<backend>/<workload-id>/<optional>
 ```
 
-The frontend and backend URLs are subdomains of that resource ID, the reply URL matches the frontend host, the redirect URI is the frontend with `/close`, and every endpoint uses HTTPS, the rules that let Fabric and Entra prove the iframe, the API, and the identity belong to the same verified owner. These constraints feel fussy until a security review asks you to prove that the thing in the iframe and the thing it calls are the same product from the same owner. Then the resource-ID shape is exactly the proof.
-
-A worked example makes the shape concrete. For a workload published from a verified `contoso.com`:
-
-> **Teaching example.** Fictional Contoso domain and workload identifiers.
+The frontend and backend URLs sit below the verified domain, the reply URL matches the frontend host, the redirect URI ends in `/close`, and every endpoint uses HTTPS. For a fictional workload under `contoso.com`:
 
 ```text
 Resource ID:  https://datafactory.contoso.com/feserver/beserver/Contoso.SalesInsights/1
@@ -1384,9 +1227,7 @@ Each URL is a subdomain of the verified domain, the reply URL matches the fronte
 
 Production identity is a set of flows, not one credential. The frontend requests delegated resource tokens for the signed-in user. The current remote-hosting reference uses a backend Entra application credential for OBO and service-to-service workload control. That credential stays on the server, belongs in Key Vault or an equivalent secret store, and must be rotated. Public distribution also requires a multitenant setup and verified-publisher prerequisites.
 
-Managed identity remains useful for supported Azure and Fabric API calls made as the publisher service. It is not a documented drop-in replacement for every backend application credential in the current remote workload flow. `DefaultAzureCredential` lets the same service use a developer identity locally and a managed identity in Azure:
-
-> **Production pattern.** Managed identity for a target API that supports application access.
+Managed identity remains useful for supported Azure and Fabric API calls made as the publisher service. It does not replace every backend application credential in the remote workload flow. `DefaultAzureCredential` supports developer identity locally and managed identity in Azure:
 
 ```python
 # backend_identity.py - service access where managed identity is supported.
@@ -1438,9 +1279,7 @@ Current public publishing requirements also include security and privacy assessm
 
 ### 12.2 Secrets, telemetry, monitoring, and support
 
-Nothing sensitive belongs in the frontend bundle or a URL. The current remote reference uses a backend application credential for some OBO and service-to-service flows, so store that credential in Key Vault or an equivalent server-side secret store and rotate it. Use managed identity for supported service calls where it removes a separate credential.
-
-> **Production pattern.** Server-side secret retrieval with rotation and access policy.
+Nothing sensitive belongs in the frontend bundle or a URL. Store backend credentials in Key Vault or an equivalent server-side store and rotate them. Use managed identity where the target supports it:
 
 ```python
 # secrets.py - fetch a rotated secret from Key Vault with the managed identity.
@@ -1456,9 +1295,7 @@ def backend_client_secret() -> str:
     return _client.get_secret("workload-backend-client-secret").value
 ```
 
-Design observability with the service. Where a Fabric path provides `ActivityId` or `RequestId`, carry those values into publisher logs, as the middleware in section 8 did. For Azure-hosted workloads, Application Insights can capture service telemetry and correlation fields:
-
-> **Production pattern.** Telemetry configuration without customer payloads or access tokens.
+Where Fabric provides `ActivityId` or `RequestId`, carry those values into publisher logs. Application Insights can capture the service telemetry:
 
 ```python
 # telemetry.py - send traces and metrics to Application Insights.
@@ -1500,11 +1337,7 @@ Treat a release as a compatibility set, even though its components are deployed 
 
 Changing only the package does not roll back a separately deployed frontend or backend. Record all component versions in the release evidence and define which combinations are supported.
 
-The toolkit build script can run local XML and XSD checks while creating the package:
-
-> **Current platform behavior, verified September 2026.** The command below replaces the nonexistent `scripts/Validate.ps1` path used by older drafts.
-
-> **Current reference, verified September 2026.** Build the package and enable local XML/XSD checks.
+Build the package with local XML and XSD checks:
 
 ```powershell
 pwsh ./scripts/Build/BuildManifestPackage.ps1 `
@@ -1512,11 +1345,9 @@ pwsh ./scripts/Build/BuildManifestPackage.ps1 `
   -ValidateFiles $true
 ```
 
-At the pinned commit, the script does not check the native NuGet or Mono exit codes before printing its success message and cleaning the temporary directory. The pipeline must verify that the expected `.nupkg` exists, can be opened, has the expected hash and version, and follows a successful native pack exit. See the [native pack path](https://github.com/microsoft/fabric-extensibility-toolkit/blob/dacab1b391d03010ba61a0446126d05515c487f0/scripts/Build/BuildManifestPackage.ps1#L181-L205).
+Verify that the `.nupkg` exists, opens, and contains the expected version because the pinned script does not check every native pack exit code.
 
-The local checks validate manifest files. They are not the separate publishing validator. The source-verified validator baseline is tag `v2025.12.1`, commit `78e17c3...`. Its README says Node.js 14 or later, but its locked Commander dependency requires Node.js 20 or later. Treat Node.js 20 as the effective minimum. The validator also needs Chrome or Chromium, a Fabric account with Workload Hub access, and a workload already published and accessible in the signed-in tenant.
-
-> **Current reference, verified September 2026.** Run the publishing validator against the published stage.
+After publishing the workload to a tenant, run the separate validator:
 
 ```powershell
 cd fabric-extensibility-toolkit-validator/validator
@@ -1524,11 +1355,9 @@ npm install
 node index.js --workload-name "Contoso.MyWorkload" --workload-stage "Preview"
 ```
 
-`--workload-name` is required. `--workload-stage` defaults to canonical `Preview`. Use `GeneralAvailability` for GA. Optional flags print test cases, skip interactive tests, skip passed tests, or skip update checks. Results are written below `Results/<workload>/<stage>/<validation-id>/` with Markdown and HTML reports enabled by default. PDF output is configuration-dependent. See the pinned [validator CLI](https://github.com/microsoft/fabric-extensibility-toolkit-validator/blob/78e17c385ad182f4a293dcab02c2eaa50aa7b361/validator/index.js#L41-L82), [prerequisites and output](https://github.com/microsoft/fabric-extensibility-toolkit-validator/blob/78e17c385ad182f4a293dcab02c2eaa50aa7b361/README.md#L15-L106), and [Node requirement conflict](https://github.com/microsoft/fabric-extensibility-toolkit-validator/blob/78e17c385ad182f4a293dcab02c2eaa50aa7b361/validator/package-lock.json#L1090-L1097).
+Appendix B records the validator version, prerequisites, options, and output. A successful self-validation is evidence for the publishing review, not Microsoft approval.
 
-A successful self-validation does not guarantee approval. It is evidence to bring into the publishing review. Use one version source of truth and verify that the manifest agrees with it:
-
-> **Production pattern.** The release tag is the source of truth. The build verifies the manifest instead of rewriting tracked source.
+Use the release tag as the version source and fail the build when the manifest differs:
 
 ```python
 # verify_version.py - fail the build if the release tag and manifest disagree.
@@ -1551,9 +1380,7 @@ print(f"verified {release_version}")
 
 ### 13.2 Automating the pipeline
 
-The pipeline should reproduce the publisher-hosted environment, build the frontend, update the package version, create the `.nupkg`, and enable local schema checks. Infrastructure as code can provision the frontend host, backend, secret store, and a managed identity for the service calls that support it:
-
-> **Teaching example.** Hosting excerpt only, not a complete production landing zone.
+The pipeline builds the hosted components and package as one compatibility set. This Bicep excerpt shows the hosting shape, not a complete landing zone:
 
 ```bicep
 // hosting.bicep - publisher hosting, with managed identity for supported service access.
@@ -1578,9 +1405,7 @@ resource backend 'Microsoft.Web/sites@2023-12-01' = {
 }
 ```
 
-The toolkit scripts are PowerShell-based, so a Windows runner keeps this example direct. The pinned toolkit declares no JavaScript lockfile. A production repository should pin its dependency policy and commit a lockfile before using `npm ci`. Its [current package scripts](https://github.com/microsoft/fabric-extensibility-toolkit/blob/dacab1b391d03010ba61a0446126d05515c487f0/Workload/package.json#L5-L11) expose `build:prod`, not a generic `build`.
-
-> **Teaching example.** Pipeline skeleton. Production adds permissions, environment promotion, artifact integrity, approvals, rollback, and platform-specific deployment.
+The toolkit scripts are PowerShell-based, so this skeleton uses a Windows runner. A production repository also needs a committed lockfile, environment approvals, artifact integrity, and rollback controls:
 
 ```yaml
 # .github/workflows/release.yml
@@ -1618,8 +1443,6 @@ jobs:
 ```
 
 Current public documentation keeps package upload in the Admin Portal. Fabric Admin Workloads APIs can list published workloads and automate assignment to a tenant, capacity, or workspace, but they do not expose a package-upload operation. The documented [list workloads](https://learn.microsoft.com/en-us/rest/api/fabric/admin/workloads/list-workloads), [list assignments](https://learn.microsoft.com/en-us/rest/api/fabric/admin/workloads/list-workload-assignments), [create assignment](https://learn.microsoft.com/en-us/rest/api/fabric/admin/workloads/create-workload-assignment), and [delete assignment](https://learn.microsoft.com/en-us/rest/api/fabric/admin/workloads/delete-workload-assignment) operations each state a maximum of 200 requests per hour and `PrivateLinksUnsupported`. The documentation does not define whether the limit is partitioned by caller, tenant, service principal, or operation.
-
-> **Current platform behavior, verified September 2026.** The API limit, Private Link restriction, and lack of a documented upload endpoint can change without altering the release model.
 
 Deploy the frontend and backend with the supported mechanism for the chosen hosting platform. If the pipeline targets Azure, OpenID Connect through `azure/login` avoids a long-lived pipeline credential. Keep package upload as an explicit release step until Microsoft documents an upload API, then automate activation and assignment separately where it helps.
 
@@ -1688,16 +1511,16 @@ While Dev Gateway is connected, a local workload can take precedence over the up
 
 Cross-tenant publication uses a `[Publisher].[Workload]` name. The name and publishing tenant are reserved permanently when the publisher confirms the first upload.
 
-The rollout has three distinct stages. First, the publisher can nominate up to twenty selected tenant IDs for customer testing. The current [publishing overview](https://learn.microsoft.com/en-us/fabric/extensibility-toolkit/publishing-overview) states that propagation can take up to ten minutes, and each target tenant must allow users to work with additional workloads not validated by Microsoft. Preview and GA each require a publishing request and review.
+Cross-tenant rollout moves from selected tenants to Preview and GA. The selected-tenant stage currently accepts up to twenty tenant IDs and can take up to ten minutes to propagate.
 
-> **Current platform behavior, verified September 2026.** The selected-tenant limit is 20 and propagation can take up to 10 minutes.
+| Stage | Audience | Publisher action | Customer or administrator action | Result |
+|---|---|---|---|---|
+| Internal | Publishing tenant | Upload and activate `Org.[Name]` | Assign it to the intended scope | The item is available inside the organization |
+| Selected tenants | Up to 20 nominated tenants | Register the publisher name and nominate pilot tenants | Enable unvalidated workloads and run the pilot | The workload appears in the selected tenants |
+| Preview | All Fabric tenants, with a Preview indication | Submit the publishing request and evidence | Consent and assign after approval | The workload is publicly discoverable in Preview |
+| GA | All Fabric tenants | Submit GA evidence and operating readiness | Consent, assign, and use the supported product | The Preview indication is removed |
 
-| Stage | Audience | Identity and naming | Prerequisites | Actor | Validation | Observable result | Source |
-|---|---|---|---|---|---|---|---|
-| Internal | Publishing tenant | `Org.[Name]`, publisher tenant apps | Package, tenant settings, admin rights | Publisher tenant admin | Local checks and item behavior | Version active and assigned to intended scope | [Publish tutorial](https://learn.microsoft.com/en-us/fabric/extensibility-toolkit/tutorial-publish-workload) |
-| Selected tenants | Up to 20 nominated tenants | `[Publisher].[Workload]`, permanent publishing tenant | Confirmed name, tenant IDs, target setting enabled | Publisher administrator plus each target-tenant administrator | Publishing requirements are not validated at this stage. Use a publisher-defined customer test plan | Workload visible in nominated tenants with a preview indication after propagation | [Selected-tenant flow](https://github.com/MicrosoftDocs/fabric-docs/blob/a929e26060592bc75c59daee88dccd30a47f9d6f/docs/extensibility-toolkit/publishing-overview.md#L51-L73) |
-| Preview | All Fabric tenants, with a Preview indication | Publisher identity and verified publisher | Published Marketplace SaaS offer, attestation, support/privacy/terms evidence | Publisher and Fabric workload team | Publishing validator evidence and Preview request | Workload listed to all Fabric tenants with a Preview indication | [Preview flow](https://github.com/MicrosoftDocs/fabric-docs/blob/cdcf04be973347c30555d514eb17993ef29bc4cc/docs/workload-development-kit/publish-workload-flow.md#L35-L39) |
-| GA | All Fabric tenants, without a Preview indication | Same permanent publisher identity | GA evidence, livesite/support readiness, and the active requirement set | Publisher and Fabric workload team | GA request and operational evidence | Preview indication removed across tenants. Customer administrators can then consent and assign | [GA flow](https://github.com/MicrosoftDocs/fabric-docs/blob/cdcf04be973347c30555d514eb17993ef29bc4cc/docs/workload-development-kit/publish-workload-flow.md#L41-L45) |
+Appendix F keeps the exact stage sources and current discrepancies.
 
 The actions are separate:
 
@@ -1743,50 +1566,21 @@ flowchart TB
     style HUB fill:#1565c0,stroke:#0d47a1,color:#ffffff
 ```
 
-Selected tenants let the ISV test installation, consent, capacity assignment, support, and real customer data boundaries before public distribution. Current source sequencing does not establish a standalone Marketplace requirement for this stage. Confirm the intended commercial setup before customer onboarding.
+Selected tenants let the publisher test installation, consent, onboarding, support, and real customer boundaries before public distribution.
 
 ### 16.2 Publishing requirements, commerce, and support
-
-Preview and GA require general, workload, and item validation, publisher attestation, privacy and terms links, support documentation, and a verified publisher. Verified publisher status confirms the publisher's identity. It is not a security certification. Current Entra guidance also requires an associated work or school tenant, matching verified domain, appropriate Entra and Partner Center roles, MFA, and identity-platform terms. Publisher verification is unavailable in national clouds. Recheck the [publisher verification requirements](https://github.com/MicrosoftDocs/entra-docs/blob/a4be4ac419c4e857b1c4de7dee22c9f7e0c750f9/docs/identity-platform/publisher-verification-overview.md#L42-L83) before a public request.
-
-Current first-party pages give three trial answers. The split [item requirements](https://github.com/MicrosoftDocs/fabric-docs/blob/bd2c3018e8ee6feb445c2868d83123641a58f946/docs/extensibility-toolkit/publishing-requirements-item.md#L936-L944) mark a trial optional for Preview and GA. One [legacy business row](https://github.com/MicrosoftDocs/fabric-docs/blob/fb19ffac3f53b90a7da31cebb045bfe066e05ff9/docs/workload-development-kit/publish-workload-requirements.md#L31-L38) marks it required for both. A [legacy design row](https://github.com/MicrosoftDocs/fabric-docs/blob/fb19ffac3f53b90a7da31cebb045bfe066e05ff9/docs/workload-development-kit/publish-workload-requirements.md#L65-L73) says optional for Preview and required for GA. Confirm the intended-stage rule with the active validator and publishing team.
 
 Fabric Workload Hub and Microsoft Marketplace serve different roles. Workload Hub is where Fabric administrators discover, consent to, and assign the workload. Preview and GA currently require a Microsoft Marketplace SaaS offer in Partner Center, including nontransactable offers.
 
 The current [SaaS listing options](https://learn.microsoft.com/en-us/partner-center/marketplace-offers/plan-saas-offer) are **Contact me**, **Free trial**, **Get it now (Free)**, and **Sell through Microsoft**. Only the transactable option uses Microsoft-facilitated billing. Existing licensing or publisher-managed sales can use a nontransactable listing, but the Marketplace offer remains part of the public Fabric publishing requirements.
 
-> **Current platform behavior, verified September 2026.** Listing names, trial requirements, and fulfillment behavior belong to the active Partner Center and Fabric publishing programs.
+Publishing is one step in the customer journey. A prospect still needs to understand the business outcome, obtain administrative approval, configure the service, and reach a useful result. Design that journey as carefully as the item editor.
 
-Transactable offers use the SaaS Fulfillment APIs v2 and continuously available landing-page and connection-webhook endpoints. Validate the Marketplace authorization header and keep secrets out of URLs:
+For an existing SaaS customer, explain how the workload connects to the current subscription and what additional setup is required. For a new customer, make evaluation, purchasing, entitlement, and support clear. The Marketplace offer and the Fabric workload should make the same product promise even when commercial and administrative actions happen in different places.
 
-> **Teaching example.** Webhook dispatch skeleton, not a complete fulfillment implementation.
+Microsoft co-sell can complement that route, but it has separate [readiness and eligibility requirements](https://learn.microsoft.com/en-us/partner-center/referrals/co-sell-requirements). A live listing creates an opportunity for distribution. Selling still depends on a clear use case, credible evidence, and follow-through with customers.
 
-```python
-# marketplace_webhook.py - react to Microsoft Marketplace SaaS subscription events.
-from fastapi import FastAPI, Header, HTTPException, Request
-
-app = FastAPI()
-
-@app.post("/marketplace/webhook")
-async def webhook(
-    request: Request,
-    authorization: str = Header(default=""),
-) -> dict:
-    if not validate_marketplace_token(authorization):
-        raise HTTPException(401, "Invalid Marketplace token")
-    event = await request.json()
-    action = event.get("action")
-    sub_id = event.get("subscriptionId")
-    if action == "Subscribe":
-        grant_access(sub_id, event["planId"])
-    elif action in ("Unsubscribe", "Suspend"):
-        revoke_access(sub_id)
-    elif action == "ChangePlan":
-        update_plan(sub_id, event["planId"])
-    return {"status": "accepted"}
-```
-
-The exact activation flow depends on the offer configuration. Auto-activated plans receive a `Subscribe` webhook and do not use the older explicit activation sequence in the same way. Build from the current Partner Center technical documentation rather than copying an older fulfillment sample.
+Preview and GA also require publishing evidence, support and privacy material, publisher verification, and the active stage requirements. Appendix F records the current trial and requirement conflicts. Appendix D keeps the fulfillment webhook example.
 
 ### 16.3 Choosing a path
 
@@ -1801,13 +1595,13 @@ First apply the product-fit criteria from section 1.3. If a workload is justifie
 
 The channel can widen the addressable audience, but it does not guarantee adoption or sales. Confirm the permanent publisher name and tenant only after the product and operating model can support the chosen path.
 
+Start with a small group of selected-tenant pilots. Continue only when customers reach a useful result, onboarding effort is repeatable, the workload sees regular use, and the path from pilot to paid service is clear enough to support.
+
 ## 17. The post-publish lifecycle
 
 ### 17.1 Updates, migration, and deprecation
 
-Every release uses a new package version. If the control-plane definition shape changes, the frontend must read older definition parts and upgrade them safely. Version the definition explicitly so an item created by an earlier release can still open:
-
-> **Teaching example.** Definition migration logic after a definition part has been decoded.
+Every release uses a new package version. If the definition shape changes, the frontend must still open older items and upgrade them safely. That compatibility is part of customer trust:
 
 ```python
 # migrate.py - bring an item definition forward across versions on load.
@@ -1826,23 +1620,21 @@ Retiring a version or item type is a managed step. Existing items still need to 
 
 ### 17.2 Monitoring, consent, rollback, and feature flags
 
-Telemetry can measure adoption and failures without collecting customer payloads. A release that adds permissions changes the tenant consent contract, so announce it and expect rollout to wait for administrators.
+Telemetry can measure adoption and failures without collecting customer payloads. A release that adds permissions changes the tenant consent contract, so explain the change before administrators are asked to approve it.
 
-Do not plan to re-upload an old package version as rollback. Fabric requires a version it has not seen before. Keep the previous code and manifests so you can package that known behavior under a new forward version. Where practical, put risky functionality behind remotely controlled flags so it can be disabled without changing the package. Test the exact activation, deactivation, and rollback procedure for the current publication stage because preview tooling can remain one-directional.
+Fabric requires a package version it has not seen before, so rollback means publishing known-good behavior under a new forward version. Keep previous code and manifests, use feature flags where they reduce risk, and test the recovery path before customers need it.
 
 ## 18. Recap and next steps
 
-A workload is a publisher-hosted web product that Fabric loads inside an iframe and exposes as one or more item types. The manifest package tells Fabric what to load and how each item behaves. Delegated frontend tokens, backend OBO, application credentials, and managed identities cover different calls and must remain separate.
+A workload gives a publisher-owned product a native item and experience inside Fabric. The package, hosted application, identity flows, and data plane remain separate contracts that must evolve together.
 
-A release is ready when the frontend and optional backend use approved HTTPS endpoints, portal framing works under both domain families, resource scopes and token audiences are correct, and secrets remain server-side. Item definitions are compact control-plane parts, while customer data uses an explicit data-plane design. The package builds with local schema checks, has a new version, and has been exercised through Dev Gateway. Public distribution adds the publishing validator, security and privacy material, verified-publisher requirements, support obligations, and a Microsoft Marketplace SaaS offer.
-
-For an ISV or SDC, the result is a bridge rather than a product rewrite. Customers can use the service from Fabric, the publisher can keep operating its existing SaaS or PaaS and intellectual property, and the same workload can move from an internal tenant to selected customers and public distribution. That reach comes with clear responsibility for every token, data field, API, and support promise that crosses into the publisher's environment.
+The business decision is just as concrete: choose a customer segment, a recurring problem, a pilot, and the signal that will prove value. An ISV may extend an existing product. An SDC may turn repeated project work into a supported accelerator. Neither path becomes a product without ownership, support, and a credible route from evaluation to ongoing use.
 
 Continue with the action that matches your role:
 
 | Role | Next action | Use |
 |---|---|---|
-| Product owner / ISV lead | Complete the workload-versus-alternative decision and choose the intended distribution stage | Sections 1.3 and 16.3 |
+| Product owner / ISV or SDC lead | Name the target customer, problem, pilot, value signal, and intended commercial path | Sections 1 and 16 |
 | Architect / security lead | Approve the boundary, identity, data-transfer, and evidence models | Sections 2, 4, 11, and 12 |
 | Developer | Follow the Fast track and record the first successful and failed item flows | Sections 0, 2, 5, 6, 8, and 9 |
 | Release engineer | Define the release version source, component compatibility set, and validation evidence | Sections 10, 13, and 17 |
@@ -1873,7 +1665,7 @@ Source-to-package map:
 | XSDs and `ManifestPackage.nuspec` | Build input and NuGet metadata | Not hosted application code |
 | Frontend bundle, backend code, environment files, business data, item-instance definitions | Not included | Deploy or store through their own runtime and data-plane paths |
 
-> **Current platform behavior, verified September 2026.**
+Current package limits:
 
 | Package limit | Maximum |
 |---|---:|
@@ -1911,7 +1703,7 @@ Capability matrix:
 
 ### Appendix B: Setup, development, package, and validator commands
 
-> **Current reference, verified September 2026.**
+The command reference below uses the pinned toolkit and validator versions:
 
 | Task | Actor and prerequisite | Start directory | Command or action | Parameters to adapt | Expected output | Versioned source and status |
 |---|---|---|---|---|---|---|
@@ -1920,7 +1712,7 @@ Capability matrix:
 | Create item type | Developer after setup | `scripts/Setup` | `pwsh ./CreateNewItem.ps1 -ItemName "Forecast" -srcItemName "HelloWorld"` | Required `ItemName`, optional `srcItemName` defaulting to `HelloWorld` | Copied item files, followed by manual wiring | [Signature](https://github.com/microsoft/fabric-extensibility-toolkit/blob/dacab1b391d03010ba61a0446126d05515c487f0/scripts/Setup/CreateNewItem.ps1#L1-L20), [follow-up](https://github.com/microsoft/fabric-extensibility-toolkit/blob/dacab1b391d03010ba61a0446126d05515c487f0/scripts/Setup/CreateNewItem.ps1#L157-L192) |
 | Serve local frontend | Developer with generated environment files | `scripts/Run` or repository root with the root-relative path | `pwsh ./StartDevServer.ps1` | No parameters | Local SPA, assets, and development manifest endpoints | [Signature](https://github.com/microsoft/fabric-extensibility-toolkit/blob/dacab1b391d03010ba61a0446126d05515c487f0/scripts/Run/StartDevServer.ps1#L1-L20), [documented invocations](https://github.com/microsoft/fabric-extensibility-toolkit/blob/dacab1b391d03010ba61a0446126d05515c487f0/docs/Project_Setup.md#L49-L53). Source-inspected, not run |
 | Register local workload | Developer with personal Fabric Developer Mode | `scripts/Run` or repository root with the root-relative path, second terminal | `pwsh ./StartDevGateway.ps1` | Boolean `InteractiveLogin`, default `$true`. On Linux use `-InteractiveLogin $false` | Local workload registration pointing Fabric to Dev Server | [Signature](https://github.com/microsoft/fabric-extensibility-toolkit/blob/dacab1b391d03010ba61a0446126d05515c487f0/scripts/Run/StartDevGateway.ps1#L1-L16), [platform branches](https://github.com/microsoft/fabric-extensibility-toolkit/blob/dacab1b391d03010ba61a0446126d05515c487f0/scripts/Run/StartDevGateway.ps1#L33-L82). It always rebuilds the `dev` manifest |
-| Switch to remote hosting | Developer preparing remote endpoints | `scripts/Setup` or repository root with the root-relative path | `pwsh ./SwitchToRemoteHosting.ps1 ...` | `WorkloadRoot`, `BackendAppId`, `BackendAudience`, `BackendUrl`, `TenantId`, `EnableOneLakeLogging`, `BackendClientSecret`, switch `Force` | Remote hosting manifest, app, and environment changes | [Signature and examples](https://github.com/microsoft/fabric-extensibility-toolkit/blob/dacab1b391d03010ba61a0446126d05515c487f0/scripts/Setup/SwitchToRemoteHosting.ps1#L43-L82). Source-inspected caveats follow in section 6.3 |
+| Switch to remote hosting | Developer preparing remote endpoints | `scripts/Setup` or repository root with the root-relative path | `pwsh ./SwitchToRemoteHosting.ps1 ...` | `WorkloadRoot`, `BackendAppId`, `BackendAudience`, `BackendUrl`, `TenantId`, `EnableOneLakeLogging`, `BackendClientSecret`, switch `Force` | Remote hosting manifest, app, and environment changes | [Signature and examples](https://github.com/microsoft/fabric-extensibility-toolkit/blob/dacab1b391d03010ba61a0446126d05515c487f0/scripts/Setup/SwitchToRemoteHosting.ps1#L43-L82). At this pin it updates `.env.dev` and `.env.test`, writes the backend secret to those local files, and migrates only `HelloWorldItem.xml`. Review and complete the changes before use |
 | Build manifest package | Release engineer | Repository root or any directory when using the root-relative path | `pwsh ./scripts/Build/BuildManifestPackage.ps1 -Environment prod -ValidateFiles $true` | Boolean `ValidateFiles`, default `$false`. `Environment`, default `dev`, with no `ValidateSet`. Use a matching environment file | Versioned `.nupkg` plus local XML/XSD findings | [Signature](https://github.com/microsoft/fabric-extensibility-toolkit/blob/dacab1b391d03010ba61a0446126d05515c487f0/scripts/Build/BuildManifestPackage.ps1#L1-L14), [build logic](https://github.com/microsoft/fabric-extensibility-toolkit/blob/dacab1b391d03010ba61a0446126d05515c487f0/scripts/Build/BuildManifestPackage.ps1#L41-L205). No `Force` parameter. Verify the artifact because native pack exit codes are not checked |
 | Validate publication | Publisher with Node.js 20 or later, Chrome/Chromium, Workload Hub access, and a workload published in the signed-in tenant | `fabric-extensibility-toolkit-validator/validator` | `npm install`, then `node ./index.js --workload-name "Contoso.MyWorkload" --workload-stage "Preview"` | Required workload name. Canonical stage `Preview` or `GeneralAvailability`. Optional `--print-testcases`, `--skipInteractiveTests`, `--skipPassedTests`, `--skipUpdates` | Automated and guided manual tests plus result files under `Results/<workload>/<stage>/<validation-id>/`. Not Microsoft approval | Validator tag `v2025.12.1`, commit [`78e17c3...`](https://github.com/microsoft/fabric-extensibility-toolkit-validator/commit/78e17c385ad182f4a293dcab02c2eaa50aa7b361), [CLI](https://github.com/microsoft/fabric-extensibility-toolkit-validator/blob/78e17c385ad182f4a293dcab02c2eaa50aa7b361/README.md#L39-L106). Source-inspected, not run |
 
@@ -1936,6 +1728,31 @@ Package upload remains an Admin Portal action in current public documentation. F
 | `copilot-instructions.md`, scoped instructions, `@fabric` | Copilot-specific routing and conventions | Host-specific guidance |
 | Community UX MCP referenced by the toolkit | Optional retrieval over UX material | Community dependency, review before use |
 
+Repository guidance map:
+
+```text
+.ai/
+├── context/
+│   ├── fabric.md
+│   └── fabric-workload.md
+└── commands/
+    ├── item/
+    └── workload/
+```
+
+The optional community UX MCP needs a locally reviewed command and dependency set before it is enabled:
+
+```json
+{
+  "mcpServers": {
+    "fabric-ux-community": {
+      "command": "<command from the reviewed community repository>",
+      "args": []
+    }
+  }
+}
+```
+
 Apply the same four gates to every agent-authored change:
 
 1. **SDK:** the method and type exist.
@@ -1945,18 +1762,47 @@ Apply the same four gates to every agent-authored change:
 
 ### Appendix D: Python service reference
 
-| Example and location | Dependencies | Label | Boundary demonstrated | Production work still required |
-|---|---|---|---|---|
-| `auth.py`, section 4.2 | FastAPI, PyJWT, Entra JWKS | Teaching example | Signature, issuer, version, audience, scope | Multitenant issuer policy, resource authorization, key cache, telemetry |
-| `onelake.py`, section 6.2 | `requests`, `pandas`, acquired OneLake token | Teaching example | Read with a resource token | OBO acquisition, streaming, retries, large files |
-| `jobs.py`, section 6.3 | FastAPI background task | Teaching example | Long-running execution shape | Fabric remote-job contract, durable state, cancellation, scale |
-| `greengrid_saas.py`, section 9.2 | FastAPI, Pydantic, `auth.py` | Teaching example | Entra-protected publisher API | Tenant isolation, rate limits, threat model, operational controls |
-| `backend_identity.py`, section 11.2 | `azure-identity` | Production pattern | Managed identity for a supported target API | RBAC, resource scopes, environment policy |
-| `secrets.py`, section 12.2 | `azure-identity`, `azure-keyvault-secrets` | Production pattern | Server-side Key Vault access | Rotation, alerting, break-glass process |
-| `telemetry.py`, section 12.2 | `azure-monitor-opentelemetry` | Production pattern | Correlated publisher telemetry | Sampling, retention, privacy, customer-facing monitoring |
-| `verify_version.py`, section 13.1 | Python standard library, release version env | Production pattern | Release tag and manifest concordance | Immutable artifacts and component compatibility record |
-| `migrate.py`, section 17.1 | Definition decoder/encoder | Teaching example | Definition schema migration | Backups, idempotency, failure recovery, compatibility tests |
-| Marketplace webhook, section 16.2 | FastAPI, Marketplace token validation and fulfillment client | Teaching example | Subscription-event dispatch | Fulfillment v2, retries, idempotency, 24/7 operations |
+| Example and location | Dependencies | Demonstrates | Production work still required |
+|---|---|---|---|
+| `auth.py`, section 4.2 | FastAPI, PyJWT, Entra JWKS | Signature, issuer, version, audience, scope | Multitenant issuer policy, resource authorization, key cache, telemetry |
+| `onelake.py`, section 6.2 | `requests`, `pandas`, acquired OneLake token | Read with a resource token | OBO acquisition, streaming, retries, large files |
+| `jobs.py`, section 6.3 | FastAPI background task | Long-running execution shape | Fabric remote-job contract, durable state, cancellation, scale |
+| `greengrid_saas.py`, section 9.2 | FastAPI, Pydantic, `auth.py` | Entra-protected publisher API | Tenant isolation, rate limits, threat model, operational controls |
+| `backend_identity.py`, section 11.2 | `azure-identity` | Managed identity for a supported target API | RBAC, resource scopes, environment policy |
+| `secrets.py`, section 12.2 | `azure-identity`, `azure-keyvault-secrets` | Server-side Key Vault access | Rotation, alerting, break-glass process |
+| `telemetry.py`, section 12.2 | `azure-monitor-opentelemetry` | Correlated publisher telemetry | Sampling, retention, privacy, customer-facing monitoring |
+| `verify_version.py`, section 13.1 | Python standard library, release version env | Release tag and manifest concordance | Immutable artifacts and component compatibility record |
+| `migrate.py`, section 17.1 | Definition decoder/encoder | Definition schema migration | Backups, idempotency, failure recovery, compatibility tests |
+| Marketplace webhook, Appendix D | FastAPI, Marketplace token validation and fulfillment client | Subscription-event dispatch | Fulfillment v2, retries, idempotency, 24/7 operations |
+
+#### Marketplace webhook example
+
+This skeleton shows event dispatch only. A production implementation must validate the Marketplace token and implement fulfillment v2, retries, idempotency, entitlement state, and continuous operations.
+
+```python
+# marketplace_webhook.py - react to Microsoft Marketplace SaaS subscription events.
+from fastapi import FastAPI, Header, HTTPException, Request
+
+app = FastAPI()
+
+@app.post("/marketplace/webhook")
+async def webhook(
+    request: Request,
+    authorization: str = Header(default=""),
+) -> dict:
+    if not validate_marketplace_token(authorization):
+        raise HTTPException(401, "Invalid Marketplace token")
+    event = await request.json()
+    action = event.get("action")
+    sub_id = event.get("subscriptionId")
+    if action == "Subscribe":
+        grant_access(sub_id, event["planId"])
+    elif action in ("Unsubscribe", "Suspend"):
+        revoke_access(sub_id)
+    elif action == "ChangePlan":
+        update_plan(sub_id, event["planId"])
+    return {"status": "accepted"}
+```
 
 ### Appendix E: Release and compliance checklist, diagnostics quick reference
 
@@ -2084,6 +1930,7 @@ Publishing and administration:
 Commerce:
 
 - [Microsoft Marketplace SaaS offer options](https://learn.microsoft.com/en-us/partner-center/marketplace-offers/plan-saas-offer)
+- [Microsoft co-sell requirements](https://learn.microsoft.com/en-us/partner-center/referrals/co-sell-requirements)
 
 #### Maintenance rule
 
@@ -2096,9 +1943,7 @@ Commerce:
 
 A scannable summary of the manuscript.
 
-Core commands:
-
-> **Current reference, verified September 2026.** These are source-inspected locations and signatures, not an executed sequence. The pinned `SetupWorkload.ps1` build-handoff warning is documented in section 5 and Appendix B.
+Core commands (details and caveats are in Appendix B):
 
 ```powershell
 pwsh ./scripts/Setup/SetupWorkload.ps1 -WorkloadName "Org.YourWorkload"
@@ -2110,7 +1955,7 @@ pwsh ./scripts/Build/BuildManifestPackage.ps1 `
   -ValidateFiles $true
 ```
 
-Verify the `.nupkg` file, archive contents, version, and hash. At the pinned commit, the build script's success message is not proof that the native pack command succeeded.
+Verify the `.nupkg` file, archive contents, version, and hash.
 
 The manifest package:
 

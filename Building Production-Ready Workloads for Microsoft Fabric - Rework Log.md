@@ -9,6 +9,8 @@
 
 This log maps the audit items T01 through T15 to the V1.0.0 manuscript. It separates documentary verification from commands and tenant flows that were executed.
 
+The September 17 editorial review was then applied as a focused pass: the opening provenance table moved to Appendix F, generic callout labels were reduced to three structural concepts, sections 1 and 16 gained the requested commercial framing, section 7 was shortened, and the optional MCP and Marketplace webhook details moved to the appendices.
+
 ## Audit item status
 
 | ID | Status | Main changes | Evidence in the manuscript |
@@ -53,10 +55,10 @@ This log maps the audit items T01 through T15 to the V1.0.0 manuscript. It separ
 | Bash syntax | Not run | Three Bash blocks remain simple environment/setup commands. No Bash executable was available on this Windows host |
 | Mermaid | Complete | All 16 outline and manuscript diagrams rendered with Mermaid CLI 11.16.0 |
 | External citations | Complete | 104 cited HTTP/HTTPS links returned a non-error response during the final check |
-| HTML | Complete | Named HTML and `index.html` are byte-identical, contain unique IDs and 16 inline SVG diagrams, and have no external script dependency |
+| HTML | Complete | Named HTML and `index.html` are byte-identical, contain unique IDs and 14 inline SVG diagrams, and have no external script dependency |
 | HTML behavior | Complete | Outline/Manuscript click and keyboard navigation passed. Mobile emulation at 390 by 844 and desktop width checks found no page-level horizontal overflow or runtime exception |
 | Color contrast | Complete | Web chrome, movement headers, code text, muted text, and cover text met WCAG AA normal-text contrast for the tested color pairs |
-| PDF | Complete | 53 pages, 77 bookmarks, 243 clickable links, the previous edition's designed cover and spacious contents treatment, rasterized Mermaid diagrams, correct title metadata, and no blank spill page |
+| PDF | Complete | 47 pages, 77 bookmarks, 202 clickable links, the previous edition's designed cover and spacious contents treatment, rasterized Mermaid diagrams, correct title metadata, and no blank spill page |
 | Fabric tenant execution | Not run | No tenant was modified and the first-run, assignment, consent, or remote endpoint flows were not executed for this editorial release |
 | Fabric publishing validator | Not run | The manuscript documents its inputs and outputs but does not claim a validator result |
 | Marketplace lifecycle | Not run | No offer, webhook, fulfillment, or billing flow was created or exercised |
