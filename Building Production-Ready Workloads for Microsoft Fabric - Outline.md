@@ -1,6 +1,8 @@
 # Building Production-Ready Workloads for Microsoft Fabric
 
-### From the ISV business case and architecture to secure delivery, operations, and distribution
+*From the ISV business case and architecture to secure delivery, operations, and distribution*
+
+> Pin the technical reference record near the opening: implementation commit, separate release-tag commit, frontend SDK dependency range and lockfile status, publishing-validator tag/commit, technical verification date, editorial date, and validation scope. State plainly that documentary and static checks do not equal tenant execution.
 
 > Reviewed against Microsoft Learn and the official toolkit repositories on September 17, 2026.
 
@@ -99,9 +101,13 @@ flowchart LR
 
 ## Choose your path
 
+- State the primary audience: ISV/SDC product and engineering teams, with developer, security, operations, administration, and publishing readers.
+- State assumed knowledge: web applications, REST/JSON, OAuth concepts, source control, and basic Fabric workspaces/items. TypeScript/React and Python are scenario-specific.
+- State learning outcomes: decide whether a workload fits, explain boundaries, build and diagnose an item, define a release unit, and choose a distribution path.
+
 | Path | Sections | Outcome |
 |---|---|---|
-| **Fast track** | 0 → 2 → 5 → 6 → 9 | Open a first workload and connect the GreenGrid example |
+| **Fast track** | 0 → 2 → 5 → 6 → 9 | Follow the source-inspected first-workload path and connect the GreenGrid example |
 | **Production track** | 10 through 17 | Turn the prototype into a hosted, secured, packaged, assigned, and supportable product |
 
 - Introduce a visual convention for **Stable concept** versus **Current platform behavior, verified September 2026**.
@@ -110,7 +116,7 @@ flowchart LR
 # 0. Before you begin
 
 - 0.1 Environment, accounts, and assumed concepts. Entra app creation rights and an F, P, or Trial capacity are required. An Azure subscription is optional until Azure hosting is used. Node.js, PowerShell, .NET, Azure CLI, and the toolkit scripts. Administrator, capacity, workspace, publisher, and user roles kept separate.
-- 0.2 A five-minute first run, the shortest path from an empty folder to the Hello World item open inside Fabric, as a hook before the model.
+- 0.2 A source-inspected first-run path, used only after the common and local-development prerequisites are satisfied. Record the expected Hello World result and the pinned setup-script defect without claiming tenant execution.
 - 0.3 Common pitfalls, the environment traps that catch people before any code, capacity, developer mode, env files, token audience, framing, and package version.
 
 ---
@@ -124,7 +130,7 @@ flowchart LR
 - Introduce GreenGrid immediately as the running example: an energy-scoring SaaS that works with approved OneLake data while its scoring IP stays in the publisher cloud.
 - 1.1 The ISV business case: bring your service to Fabric data. Cover ISVs and SDCs, an existing SaaS or PaaS, publisher-owned IP, lower per-customer integration work, and a repeatable path from one tenant to selected customers and public distribution. Separate Workload Hub installation from Microsoft Marketplace commerce.
 - 1.2 What Fabric gives you, and what a workload adds. Workspaces, items, Fabric APIs, OneLake data, and explicit integrations with catalog, monitoring, Git, and deployment. State clearly that sensitivity protection and built-in behavior are not inherited automatically.
-- 1.3 The toolkit, when to use it, and its limits. Frontend-first baseline, optional remote endpoints, current first-party documentation conflicts, capacity requirements, and alternatives such as Power BI custom visuals, Activator, pipelines, notebooks, and Azure services.
+- 1.3 The toolkit, when to use it, and its limits. Add an observable decision matrix comparing a Fabric workload, Power BI custom visual, Activator, pipeline/notebook/function, and separate SaaS experience. Include persistent item, dedicated editor, lifecycle, distribution, required skills, SDK compatibility, publishing review, consent, support, and operations.
 
 ```mermaid
 flowchart LR
@@ -178,7 +184,8 @@ flowchart TB
     HOST -->|"delegated token flow"| ENTRA
     IFRAME -->|"Fabric token"| APIS
     IFRAME -->|"Storage token"| OL
-    IFRAME -->|"publisher API call"| BE
+    IFRAME -->|"frontend API call"| BE
+    APIS -->|"jobs / lifecycle<br/>SubjectAndAppToken1.0"| BE
     BE -->|"validate, OBO, or app token"| ENTRA
     style BROWSER fill:#f4f7fb,stroke:#6e5494,color:#553c7b
     style FAB fill:#e3f0fb,stroke:#1565c0,color:#0d47a1
@@ -192,6 +199,7 @@ flowchart TB
     style ENTRA fill:#8957e5,stroke:#6e40c9,color:#ffffff
 ```
 
+- Add a relationship table separating frontend → Fabric/OneLake, frontend → publisher API, Fabric → remote endpoint (`SubjectAndAppToken1.0`), and publisher backend → target resource.
 - 2.2 Items as native artifacts, with explicit integrations. Control-plane item definitions are separate from OneLake data. Catalog, monitoring, Git, deployment, jobs, and lifecycle behavior each need configuration and validation.
 - 2.3 A request, step by step, from opening an item to acquiring a resource-scoped delegated token and calling the matching Fabric, OneLake, or publisher endpoint.
 
@@ -215,22 +223,22 @@ sequenceDiagram
 
 ## 3. The manifest package: the contract with Fabric
 
-- 3.1 Workload, product, and paired item definitions. Cover `WorkloadManifest.xml`, `Product.json`, and paired XML/JSON definitions per item type. The package contains at most 10 item types, is limited to 20 MB, supports 15 packaged assets at 1.5 MB each, and limits `Product.json` to 50 KB.
+- 3.1 Workload, product, and paired item manifests. Separate source tree from built package structure. Add an object/level/owner/delivery-or-storage/change-moment table for workload manifest, product manifest, item-type XML/JSON, and item-instance definition parts. Keep current package limits with exact sources.
 - 3.2 Identity and naming, `Org.[Name]` for one tenant versus `[Publisher].[Workload]` for cross-tenant publication. Permanent reservation on first confirmation, assignment scopes, public publishing requirements, and the separate Microsoft Marketplace SaaS offer.
 
 | Aspect | `Org.[Name]` (internal) | `[Publisher].[Workload]` (cross-tenant) |
 |---|---|---|
 | Audience | Your own tenant | Other tenants |
 | Registration | No separate workload-name registration | Name and publishing tenant reserved permanently |
-| Availability | Upload, activate, and assign | Selected tenants, public Preview, then GA |
+| Availability | Upload, activate, and assign | Selected tenants, Preview, then GA |
 | Requirements | General hosting, identity, and manifest requirements | General, workload, item, attestation, support, and review requirements |
-| Commerce | Not required | Microsoft Marketplace SaaS offer required for public Preview and GA |
-| Name length | No special limit | Workload portion at most 32 characters |
+| Commerce | Not required | Microsoft Marketplace SaaS offer required for Preview and GA |
+| Name length | No separate limit established by the cited publishing overview | Workload portion at most 32 characters |
 
 ## 4. Identity and access with Microsoft Entra
 
-- 4.1 Delegated frontend tokens and backend OBO. Current `acquireFrontendAccessToken({ scopes })`, one acquisition API but separate resource audiences and tokens, and OBO reserved for backend token exchange.
-- 4.2 Entra applications, scopes, and service identities. `Fabric.Extend`, hosting-mode-specific redirects and app registrations, narrow publisher API scopes, backend credentials for documented remote flows, and managed identity for supported service calls.
+- 4.1 Delegated frontend tokens and backend OBO. Use the documented token result property, one acquisition API but separate resource audiences and tokens, and OBO only for backend exchange.
+- 4.2 Entra applications, scopes, and service identities. Distinguish v2 client-ID audiences from v1 audience rules, pair issuer/version/audience, and state that token and scope validation do not replace tenant/workspace/item authorization. Keep `Fabric.Extend`, hosting-mode-specific redirects, backend credentials, and managed identity roles separate.
 
 ---
 
@@ -240,8 +248,8 @@ sequenceDiagram
 
 ## 5. The toolkit and the development environment
 
-- 5.1 The starter kit, setup script, and Entra applications. Prefer `SetupWorkload.ps1`, explain that `Setup.ps1` remains a compatibility wrapper, and show why local development still uses real delegated identity.
-- 5.2 Dev Server, Dev Gateway, and the Hello World checkpoint. Exact current tenant-setting names, personal Fabric Developer Mode, F/P/Trial capacity, Chromium Local Network Access, and the two-terminal path.
+- 5.1 The starter kit, setup script, and Entra applications. Contrast the Learn `Setup.ps1` wrapper command with the pinned `SetupWorkload.ps1` implementation, list its parameters, and document the unsupported final `-Force` handoff. Show why local development still uses real delegated identity.
+- 5.2 Dev Server, Dev Gateway, and the Hello World checkpoint. Exact tenant-setting names, personal Fabric Developer Mode, F/P/Trial capacity, Chromium Local Network Access, source-inspected script signatures, the Linux `InteractiveLogin` caveat, and the expected two-terminal result without claiming tenant execution.
 
 ```mermaid
 flowchart LR
@@ -265,15 +273,16 @@ flowchart LR
 
 ## 6. Building an item: editor, data, and capabilities
 
-- 6.1 The item, its editor, and how it surfaces. Views, routes, paired item manifests, and compact control-plane definition parts updated through item CRUD APIs.
+- 6.1 The item, its editor, and how it surfaces. Add the source-verified `scripts/Setup/CreateNewItem.ps1 -ItemName ... [-srcItemName ...]` path, its `scripts/Setup` working directory, and the mandatory `ITEM_NAMES`, `Product.json`, locale, and `App.tsx` follow-up. Then cover views, routes, paired item manifests, and compact definition parts updated through item CRUD APIs.
 - 6.2 Separating item definitions from OneLake data. Resource-specific Storage tokens, backend OBO for OneLake when needed, and no customer data, secrets, or large results in the item definition.
-- 6.3 Remote jobs, lifecycle events, and other capabilities. `SwitchToRemoteHosting.ps1`, `HostingType="Remote"`, schema `2.100.0`, Job Scheduler declarations, publisher execution endpoints, Monitoring Hub integration, soft/hard delete and restore, and current documentation inconsistencies.
+- 6.3 Remote jobs, lifecycle events, and other capabilities. `SwitchToRemoteHosting.ps1` signature and source-inspected caveats, `HostingType="Remote"`, schema `2.100.0`, Job Scheduler declarations, unresolved official job-route differences, base Monitoring Hub listing versus optional actions and Recent Runs, soft/hard delete, and restore.
 
 ## 7. Developing with AI assistance
 
 > The toolkit repository includes AI guidance and a Copilot agent. These files are versioned project documentation and can lag behind Microsoft Learn. The optional UX MCP referenced by the toolkit is community-hosted, not a Microsoft Fabric service.
 
-- Add the visual rule **AI output is a proposal, not platform truth**, followed by four gates: SDK → manifests → build → runtime.
+- Add the visual rule **AI output is a proposal, not platform truth**.
+- Structure the method as Frame → Ground → Bound → Review → Verify, with an expected result for each step, followed by the four contract gates: SDK → manifests → build → runtime.
 
 ```mermaid
 flowchart TB
@@ -306,12 +315,12 @@ flowchart TB
 
 - 7.1 Repository guidance: useful, mutable, and versioned. `.ai/context`, `.ai/commands`, and the difference between written procedures and shipped executable commands.
 - 7.2 The Copilot agent and the optional community UX MCP. `@fabric`, scoped instructions, review of community dependencies, and no implied Microsoft certification.
-- 7.3 What it generates, and keeping it honest. Paired item definitions, routes, locales, scoped token calls, Dev Gateway verification, local package checks, and separate publishing validation.
+- 7.3 What it generates, and keeping it honest. Paired item manifests, routes, locales, scoped token calls, Dev Gateway verification, local package checks, and separate publishing validation.
 
 ## 8. Diagnostics and debugging
 
-- 8.1 Reading the chain, and the token and manifest boundaries. Resource scopes and audiences, tenant/issuer policy, hosting-specific redirects, `Fabric.Extend`, local XML/XSD checks, and the post-publication validator as distinct gates.
-- 8.2 The Dev Gateway, the iframe boundary, and correlation. Browser Local Network Access, local-version precedence, and `ActivityId`/`RequestId`.
+- 8.1 Reading the chain, and the token and manifest boundaries. Use observations and one discriminating test at a time instead of mapping one symptom to one cause. Keep resource scopes/audiences, tenant/issuer policy, redirects, local checks, and publishing validation distinct.
+- 8.2 The Dev Gateway, the iframe boundary, and correlation. Browser Local Network Access, local-version precedence, and explicit propagation of `ActivityId`/`RequestId` only where those identifiers are present.
 
 ## 9. Illustration: GreenGrid
 
@@ -347,7 +356,7 @@ flowchart LR
 
 ## 10. From developer mode to production
 
-- 10.1 What changes, the Dev Gateway goes away and Fabric loads your hosted frontend, a side-by-side comparison.
+- 10.1 What changes. Keep the dev/production comparison, then separate configuration substitutions, production design decisions, and operational proof with observable exit evidence.
 
 | Concern | Developer mode | Production |
 |---|---|---|
@@ -366,18 +375,18 @@ flowchart LR
 
 ## 12. Security and compliance
 
-- 12.1 Data boundaries, labels, and publisher responsibility. Fabric warns that data and access tokens can reach the publisher, and sensitivity labels/protection are not automatically applied to workload-created items. Data minimization, residency, retention, tenant isolation, subprocessors, Conditional Access, cookies, assessments, and attestation.
+- 12.1 Data boundaries, labels, and publisher responsibility. Add a table mapping tenant isolation, resource authorization, publisher data transfers, logs, secrets, consent changes, and incident escalation to the control, responsible party, and release evidence. Preserve the warning that sensitivity labels/protection are not automatically applied.
 - 12.2 Secrets, telemetry, monitoring, and support. Backend credentials in Key Vault, managed identity where supported, no secrets in frontend or URLs, `ActivityId`/`RequestId`, publisher SLA/help/livesite contacts, and the boundary between Microsoft platform support and publisher support.
 
 ## 13. Packaging, validation, and CI/CD
 
-- 13.1 Package build, schema checks, and publishing validation. `BuildManifestPackage.ps1 -ValidateFiles $true`, unique versions, and the separate Node/Chrome validator that runs after tenant publication.
-- 13.2 Automating the pipeline. Infrastructure as code, a Windows runner for current PowerShell scripts, OIDC for Azure deployment, UI-based package upload, and Admin API automation only for listing and assignment.
+- 13.1 Package build, schema checks, and publishing validation. Define the release unit across package, frontend, backend, definition schema, and permissions. Use one version source of truth, verify the manifest and generated `.nupkg`, and document the pinned build script's unchecked native exit codes. Pin validator `v2025.12.1`, use its effective Node.js 20 minimum, canonical `Preview` or `GeneralAvailability` stage, and generated evidence after tenant publication.
+- 13.2 Automating the pipeline. Infrastructure as code, Windows runner for current PowerShell scripts, publisher-owned lockfile before `npm ci`, pinned `build:prod` script name, OIDC for Azure deployment, UI-based package upload, Admin API automation only for listing/assignment, and a validation-stage table with inputs, outputs, owners, and evidence.
 
 ## 14. Patterns and anti-patterns
 
-- 14.1 Patterns that hold up: data behind a function, compact control-plane definitions, explicit data-plane storage, resource-specific tokens, OBO only when needed, host theme, correlation IDs, and complete UI states.
-- 14.2 Anti-patterns to avoid: frontend secrets, wrong token audience, broad service identities, customer data in logs or shared caches, automatic-governance claims, nonexistent validator commands, reused versions, and data-only happy paths.
+- 14.1 Patterns that hold up. Tie each pattern to a product decision and its operational consequence.
+- 14.2 Anti-patterns to avoid. Tie each shortcut to the concrete runtime, security, publication, or migration failure it creates.
 
 ---
 
@@ -392,7 +401,7 @@ flowchart LR
 
 ## 16. Publish across tenants: Workload Hub and Microsoft Marketplace
 
-- 16.1 Selected tenants, Preview, and GA. Permanent publisher-name and tenant reservation, up to 20 selected tenants, propagation delay, required target-tenant setting, and separate publishing requests for public Preview and GA.
+- 16.1 Selected tenants, Preview, and GA. Add the full stage matrix: audience, identity/naming, prerequisites, actor, validation, observable result, and exact source. Selected tenants use a publisher test plan rather than formal publishing validation. Preview and GA approval belongs to the publisher and Fabric workload team, while customer administrators act later on consent and assignment. Define publish, activate, consent, and assign separately.
 
 ```mermaid
 flowchart TB
@@ -407,7 +416,7 @@ flowchart TB
     subgraph B["Cross-tenant path"]
         direction TB
         SELECTED["Up to 20 selected tenants"]
-        PREVIEW["Public Preview"]
+        PREVIEW["Preview"]
         GA["General availability"]
         SELECTED --> PREVIEW --> GA
     end
@@ -432,7 +441,7 @@ flowchart TB
 ```
 
 - 16.2 Publishing requirements, commerce, and support. Fabric validation and attestation, privacy/terms/help links, verified publisher, trial-requirement discrepancy, and the required Microsoft Marketplace SaaS offer with Contact me, Free trial, Get it now (Free), or Sell through Microsoft.
-- 16.3 Choosing a path: one publishing tenant, selected-tenant customer validation, or public Preview/GA with Marketplace and ongoing support obligations.
+- 16.3 Choosing a path. Reuse the product-fit criteria from 1.3, then compare internal, selected-tenant, Preview, and GA paths by audience, durable cost, and hard-to-change decisions. State that distribution is a channel, not a sales guarantee.
 
 ## 17. The post-publish lifecycle
 
@@ -441,19 +450,19 @@ flowchart TB
 
 ## 18. Recap and next steps
 
-- 18.1 The workload model end to end, the ISV/SDC business bridge, and a go-live checklist covering hosting, identity flows, data boundaries, definitions, validation, assignment, publishing, commerce, and support.
+- 18.1 The workload model end to end, the ISV/SDC business bridge, and concrete next actions by role: product owner, architect/security lead, developer, release engineer, and publisher/operations owner.
 
 ---
 
 ## Appendices
 
 - **Appendix A: Manifest package reference** (`WorkloadManifest.xml`, `Product.json`, paired item XML/JSON, release checks, limits, naming)
-- **Appendix B: Setup, development, remote-hosting, package, and validator command table**
-- **Appendix C: AI guidance hierarchy and the SDK → manifests → build → runtime validation gates**
-- **Appendix D: Python service reference table** (example label, demonstrated boundary, production gaps)
-- **Appendix E: Actionable release/compliance checklist and symptom-to-boundary diagnostics table**
-- **Appendix F: Glossary and resources**
-- **Appendix G: One-page cheat sheet** (commands, manifests, the identity rule, dev-to-prod swaps, diagnostics by boundary)
+- **Appendix B: Setup, development, package, and validator commands** (actor, directory, exact parameters, expected output, versioned source, and source-inspected defects)
+- **Appendix C: AI guidance reference** (guidance hierarchy and the SDK → manifests → build → runtime gates)
+- **Appendix D: Python service reference** (example location, dependencies, label, boundary, and production gaps)
+- **Appendix E: Release and compliance checklist, diagnostics quick reference**
+- **Appendix F: Glossary and resources** (reference baseline, provenance register, primary sources, and maintenance rule)
+- **Appendix G: Quick reference** (commands and essential decisions, with links back to the full explanations)
 
 ---
 

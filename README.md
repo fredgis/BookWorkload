@@ -20,7 +20,7 @@ The manuscript starts with the business case, then follows the workload lifecycl
 
 The official starter kit uses TypeScript and React for the publisher-hosted frontend. The server examples use Python.
 
-> Content reviewed against Microsoft Learn and the official toolkit repositories on September 17, 2026.
+> Content reviewed against Microsoft Learn and the official toolkit repositories on September 17, 2026. The review includes source inspection and static checks, not Fabric tenant or publishing execution.
 
 ## Read the manuscript
 
@@ -30,6 +30,7 @@ The official starter kit uses TypeScript and React for the publisher-hosted fron
 | PDF | [Building Production-Ready Workloads for Microsoft Fabric.pdf](Building%20Production-Ready%20Workloads%20for%20Microsoft%20Fabric.pdf) | Cover page, colored Contents, PDF bookmarks, clickable links. |
 | Markdown | [Building Production-Ready Workloads for Microsoft Fabric.md](Building%20Production-Ready%20Workloads%20for%20Microsoft%20Fabric.md) | The reviewed manuscript and code examples. |
 | Outline | [Building Production-Ready Workloads for Microsoft Fabric - Outline.md](Building%20Production-Ready%20Workloads%20for%20Microsoft%20Fabric%20-%20Outline.md) | The detailed plan. |
+| V1.0.0 rework log | [Building Production-Ready Workloads for Microsoft Fabric - Rework Log.md](Building%20Production-Ready%20Workloads%20for%20Microsoft%20Fabric%20-%20Rework%20Log.md) | T01 through T15 traceability, source decisions, validation scope, and residual maintenance rules. |
 
 ## How the manuscript is organized
 
@@ -37,7 +38,7 @@ Four movements follow the workload lifecycle. The first also explains why the mo
 
 | Reading path | Sections | Outcome |
 |---|---|---|
-| **Fast track** | 0 → 2 → 5 → 6 → 9 | Open a first workload and connect the GreenGrid example |
+| **Fast track** | 0 → 2 → 5 → 6 → 9 | Follow the first workload path and connect the GreenGrid example |
 | **Production track** | 10 through 17 | Turn the prototype into a hosted, secured, packaged, assigned, and supportable product |
 
 ```mermaid
@@ -72,7 +73,7 @@ Three distinctions drive the current revision:
 
 ### 0 · Before you begin
 
-Concrete prerequisites (Node.js, Python, PowerShell, the Azure CLI, the .NET SDK, a code editor), a five-minute first run that gets a Hello World item open inside Fabric, and the common pitfalls that catch people before any code.
+Scenario-specific prerequisites, a source-inspected first-run path with an explicit setup-script warning, and the common environmental failures to test before changing code.
 
 ### Understand
 
@@ -106,7 +107,7 @@ Concrete prerequisites (Node.js, Python, PowerShell, the Azure CLI, the .NET SDK
 
 ### Appendices
 
-Manifest-package limits, current setup and validation commands, AI guidance, Python service examples, release checks, primary references, and a one-page cheat sheet.
+Manifest-package limits, current setup and validation commands, AI guidance, Python service examples, release checks, primary references, and a quick reference.
 
 ## Files
 
@@ -114,4 +115,5 @@ Manifest-package limits, current setup and validation commands, AI guidance, Pyt
 - `Building Production-Ready Workloads for Microsoft Fabric.html`: the self-contained web version, with the outline and manuscript as two tabs.
 - `Building Production-Ready Workloads for Microsoft Fabric.pdf`: the print version with a cover, colored Contents, and bookmarks.
 - `Building Production-Ready Workloads for Microsoft Fabric.md` and its `- Outline.md` companion: the manuscript and its outline.
+- `Building Production-Ready Workloads for Microsoft Fabric - Rework Log.md`: the T01 through T15 audit trace and validation record for V1.0.0.
 - `assets/`: the compact README banner and the GreenGrid screenshots.
