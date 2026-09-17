@@ -1,78 +1,106 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="757" height="805" viewBox="0 0 757 805" font-family="Cascadia Mono, Consolas, Menlo, monospace" font-size="15.0px">
-<defs>
-<linearGradient id="body" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a0f16"/><stop offset="1" stop-color="#05080c"/></linearGradient>
-<linearGradient id="sweep" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity="0"/><stop offset="0.5" stop-color="#9be9ff" stop-opacity="0.06"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient>
-<filter id="glow" x="-20%" y="-60%" width="140%" height="220%"><feGaussianBlur stdDeviation="2.4"/></filter>
-<pattern id="scan" width="757" height="4" patternUnits="userSpaceOnUse"><rect width="757" height="1" fill="#ffffff" opacity="0.022"/></pattern>
-<clipPath id="round"><rect width="757" height="805" rx="12"/></clipPath>
-</defs>
-<g clip-path="url(#round)">
-<rect width="757" height="805" fill="url(#body)"/>
-<rect width="757" height="805" fill="url(#scan)"/>
-<rect x="0" y="0" width="757" height="90" fill="url(#sweep)"><animateTransform attributeName="transform" type="translate" from="0 -90" to="0 805" dur="6s" repeatCount="indefinite"/></rect>
-<rect width="757" height="40.0" fill="#0b1118"/>
-<path d="M8 40.0 L8 14 Q8 8 14 8 L214 8 Q220 8 220 14 L220 40.0 Z" fill="#15202b"/>
-<rect x="18" y="11" width="18" height="18" rx="3" fill="#2b5797"/>
-<text x="27" y="24" font-size="11" fill="#ffffff" text-anchor="middle" font-family="Consolas, monospace">&gt;_</text>
-<text x="44" y="25" font-size="13" fill="#cdd6df" font-family="Segoe UI, Cascadia Mono, sans-serif">Windows PowerShell</text>
-<text x="202" y="25" font-size="12" fill="#8a949e">✕</text>
-<text x="236" y="26" font-size="17" fill="#8a949e">+</text>
-<rect x="711" y="0" width="46" height="40.0" fill="#c4314b"/>
-<line x1="729" y1="15.0" x2="739" y2="25.0" stroke="#fff" stroke-width="1.3"/><line x1="729" y1="25.0" x2="739" y2="15.0" stroke="#fff" stroke-width="1.3"/>
-<rect x="683" y="15.0" width="10" height="10" fill="none" stroke="#aab3bb" stroke-width="1.3"/>
-<line x1="637" y1="20.0" x2="647" y2="20.0" stroke="#aab3bb" stroke-width="1.3"/>
-<line x1="0" y1="40.0" x2="757" y2="40.0" stroke="#070b0f" stroke-width="1"/>
-<text x="28.0" y="71.0" xml:space="preserve"><tspan fill="#7fb0e6">PS </tspan><tspan fill="#36e0ff">C:\dev\fabric</tspan><tspan fill="#c8d3de">&gt; </tspan></text>
-<clipPath id="tw"><rect x="190.3" y="56.0" width="0" height="19.0"><animate attributeName="width" from="0" to="378.6" dur="2.0s" begin="0.5s" fill="freeze" calcMode="linear"/></rect></clipPath>
-<g clip-path="url(#tw)">
-<text x="190.3" y="71.0" fill="#c8d3de" xml:space="preserve">.\Setup.ps1 -WorkloadName &quot;Org.MyWorkload&quot;</text>
-</g>
-<rect x="190.3" y="57.0" width="8" height="15.0" fill="#39ff14"><animate attributeName="x" from="190.3" to="568.9" dur="2.0s" begin="0.5s" fill="freeze"/><animate attributeName="opacity" values="1;0;1" dur="1s" begin="2.5s" repeatCount="indefinite"/></rect>
-<text x="28.0" y="109.0" fill="#ffb000" xml:space="preserve">╔════════════════════════════════════════════════════════════════════════════╗</text>
-<text x="28.0" y="128.0" fill="#ffb000" xml:space="preserve">║            &gt;&gt; MICROSOFT FABRIC  //  CUSTOM WORKLOAD RELEASE &lt;&lt;             ║</text>
-<text x="28.0" y="147.0" fill="#ffb000" xml:space="preserve">╚════════════════════════════════════════════════════════════════════════════╝</text>
-<g filter="url(#glow)" opacity="0.5"><animate attributeName="opacity" values="0.30;0.85;0.30" dur="2.6s" repeatCount="indefinite"/>
-<text x="28.0" y="185.0" fill="#2EC771" xml:space="preserve">███████╗ █████╗ ██████╗ ██████╗ ██╗ ██████╗</text>
-<text x="28.0" y="204.0" fill="#2EC771" xml:space="preserve">██╔════╝██╔══██╗██╔══██╗██╔══██╗██║██╔════╝</text>
-<text x="28.0" y="223.0" fill="#2EC771" xml:space="preserve">█████╗  ███████║██████╔╝██████╔╝██║██║</text>
-<text x="28.0" y="242.0" fill="#2EC771" xml:space="preserve">██╔══╝  ██╔══██║██╔══██╗██╔══██╗██║██║</text>
-<text x="28.0" y="261.0" fill="#2EC771" xml:space="preserve">██║     ██║  ██║██████╔╝██║  ██║██║╚██████╗</text>
-<text x="28.0" y="280.0" fill="#2EC771" xml:space="preserve">╚═╝     ╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝╚═╝ ╚═════╝</text>
-<text x="28.0" y="299.0" fill="#2EC771" xml:space="preserve">██╗    ██╗ ██████╗ ██████╗ ██╗  ██╗██╗      ██████╗  █████╗ ██████╗ ███████╗</text>
-<text x="28.0" y="318.0" fill="#2EC771" xml:space="preserve">██║    ██║██╔═══██╗██╔══██╗██║ ██╔╝██║     ██╔═══██╗██╔══██╗██╔══██╗██╔════╝</text>
-<text x="28.0" y="337.0" fill="#2EC771" xml:space="preserve">██║ █╗ ██║██║   ██║██████╔╝█████╔╝ ██║     ██║   ██║███████║██║  ██║███████╗</text>
-<text x="28.0" y="356.0" fill="#2EC771" xml:space="preserve">██║███╗██║██║   ██║██╔══██╗██╔═██╗ ██║     ██║   ██║██╔══██║██║  ██║╚════██║</text>
-<text x="28.0" y="375.0" fill="#2EC771" xml:space="preserve">╚███╔███╔╝╚██████╔╝██║  ██║██║  ██╗███████╗╚██████╔╝██║  ██║██████╔╝███████║</text>
-<text x="28.0" y="394.0" fill="#2EC771" xml:space="preserve"> ╚══╝╚══╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═════╝ ╚══════╝</text>
-</g>
-<text x="28.0" y="185.0" fill="#2EC771" xml:space="preserve">███████╗ █████╗ ██████╗ ██████╗ ██╗ ██████╗</text>
-<text x="28.0" y="204.0" fill="#2EC771" xml:space="preserve">██╔════╝██╔══██╗██╔══██╗██╔══██╗██║██╔════╝</text>
-<text x="28.0" y="223.0" fill="#2EC771" xml:space="preserve">█████╗  ███████║██████╔╝██████╔╝██║██║</text>
-<text x="28.0" y="242.0" fill="#2EC771" xml:space="preserve">██╔══╝  ██╔══██║██╔══██╗██╔══██╗██║██║</text>
-<text x="28.0" y="261.0" fill="#2EC771" xml:space="preserve">██║     ██║  ██║██████╔╝██║  ██║██║╚██████╗</text>
-<text x="28.0" y="280.0" fill="#2EC771" xml:space="preserve">╚═╝     ╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝╚═╝ ╚═════╝</text>
-<text x="28.0" y="299.0" fill="#2EC771" xml:space="preserve">██╗    ██╗ ██████╗ ██████╗ ██╗  ██╗██╗      ██████╗  █████╗ ██████╗ ███████╗</text>
-<text x="28.0" y="318.0" fill="#2EC771" xml:space="preserve">██║    ██║██╔═══██╗██╔══██╗██║ ██╔╝██║     ██╔═══██╗██╔══██╗██╔══██╗██╔════╝</text>
-<text x="28.0" y="337.0" fill="#2EC771" xml:space="preserve">██║ █╗ ██║██║   ██║██████╔╝█████╔╝ ██║     ██║   ██║███████║██║  ██║███████╗</text>
-<text x="28.0" y="356.0" fill="#2EC771" xml:space="preserve">██║███╗██║██║   ██║██╔══██╗██╔═██╗ ██║     ██║   ██║██╔══██║██║  ██║╚════██║</text>
-<text x="28.0" y="375.0" fill="#2EC771" xml:space="preserve">╚███╔███╔╝╚██████╔╝██║  ██║██║  ██╗███████╗╚██████╔╝██║  ██║██████╔╝███████║</text>
-<text x="28.0" y="394.0" fill="#2EC771" xml:space="preserve"> ╚══╝╚══╝  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝ ╚═════╝ ╚═╝  ╚═╝╚═════╝ ╚══════╝</text>
-<text x="28.0" y="451.0" fill="#1f9b54" xml:space="preserve">────────────────────────────────────────────────────────────────────────────</text>
-<text x="28.0" y="470.0" fill="#39ff14" xml:space="preserve">     [*]  B U I L D I N G   F A B R I C   W O R K L O A D S   //  v1.0      </text>
-<text x="28.0" y="489.0" fill="#1f9b54" xml:space="preserve">────────────────────────────────────────────────────────────────────────────</text>
-<text x="28.0" y="527.0" xml:space="preserve"><tspan fill="#1f9b54">┌── </tspan><tspan fill="#ffb000">RELEASE.NFO</tspan><tspan fill="#1f9b54"> ─────────────────────────────────────────────────────────────┐</tspan></text>
-<text x="28.0" y="546.0" xml:space="preserve"><tspan fill="#1f9b54">│  </tspan><tspan fill="#39ff14">&gt; </tspan><tspan fill="#8cff6b">TITLE  </tspan><tspan fill="#36e0ff">  -&gt;  </tspan><tspan fill="#c8d3de">Building Microsoft Fabric Workloads</tspan></text>
-<text x="28.0" y="565.0" xml:space="preserve"><tspan fill="#1f9b54">│  </tspan><tspan fill="#39ff14">&gt; </tspan><tspan fill="#8cff6b">SUBJECT</tspan><tspan fill="#36e0ff">  -&gt;  </tspan><tspan fill="#c8d3de">The Extensibility Toolkit, from prototype to published</tspan></text>
-<text x="28.0" y="584.0" xml:space="preserve"><tspan fill="#1f9b54">│  </tspan><tspan fill="#39ff14">&gt; </tspan><tspan fill="#8cff6b">AUTHOR </tspan><tspan fill="#36e0ff">  -&gt;  </tspan><tspan fill="#c8d3de">fredgis</tspan></text>
-<text x="28.0" y="603.0" xml:space="preserve"><tspan fill="#1f9b54">│  </tspan><tspan fill="#39ff14">&gt; </tspan><tspan fill="#8cff6b">FORMAT </tspan><tspan fill="#36e0ff">  -&gt;  </tspan><tspan fill="#c8d3de">Book chapter  //  MD . HTML . PDF (interactive TOC)</tspan></text>
-<text x="28.0" y="622.0" xml:space="preserve"><tspan fill="#1f9b54">│  </tspan><tspan fill="#39ff14">&gt; </tspan><tspan fill="#8cff6b">STAGES </tspan><tspan fill="#36e0ff">  -&gt;  </tspan><tspan fill="#c8d3de">Understand &gt; Develop &gt; Production &gt; Distribute</tspan></text>
-<text x="28.0" y="641.0" xml:space="preserve"><tspan fill="#1f9b54">│  </tspan><tspan fill="#39ff14">&gt; </tspan><tspan fill="#8cff6b">STACK  </tspan><tspan fill="#36e0ff">  -&gt;  </tspan><tspan fill="#c8d3de">TypeScript/React . Python . KQL . Fabric IQ</tspan></text>
-<text x="28.0" y="660.0" xml:space="preserve"><tspan fill="#1f9b54">│  </tspan><tspan fill="#39ff14">&gt; </tspan><tspan fill="#8cff6b">SAMPLES</tspan><tspan fill="#36e0ff">  -&gt;  </tspan><tspan fill="#c8d3de">GreenGrid [dev]  .  SkyNav [prod]</tspan></text>
-<text x="28.0" y="679.0" fill="#1f9b54" xml:space="preserve">└────────────────────────────────────────────────────────────────────────────┘</text>
-<text x="28.0" y="717.0" xml:space="preserve"><tspan fill="#36e0ff">&gt; </tspan><tspan fill="#c8d3de">Understand the model.  Develop with AI.  Ship it.  Distribute it.</tspan></text>
-<text x="28.0" y="755.0" xml:space="preserve"><tspan fill="#39ff14">[ok] </tspan><tspan fill="#1f9b54">All systems nominal.   Greetz to the Fabric workload crew. </tspan></text>
-<rect x="605.0" y="741.0" width="9" height="15.0" fill="#39ff14" opacity="0.9"><animate attributeName="opacity" values="0.9;0;0.9" dur="1.1s" repeatCount="indefinite"/></rect>
-<text x="28.0" y="774.0" fill="#1f9b54" xml:space="preserve">────────────────────────────────────────────────────────────────────────────</text>
-</g>
-<rect x="2" y="2" width="753" height="801" rx="11" fill="none" stroke="#143b2a" stroke-width="1.5"/>
+<svg xmlns="http://www.w3.org/2000/svg"
+     width="1200"
+     height="340"
+     viewBox="0 0 1200 340"
+     role="img"
+     aria-labelledby="title description">
+  <title id="title">Building Microsoft Fabric Workloads</title>
+  <desc id="description">
+    A field guide covering workload architecture, development, production,
+    and distribution in Microsoft Fabric.
+  </desc>
+
+  <defs>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#07182e"/>
+      <stop offset="1" stop-color="#0b2c59"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#3aa0ff"/>
+      <stop offset="1" stop-color="#58c6ff"/>
+    </linearGradient>
+    <clipPath id="frame">
+      <rect width="1200" height="340" rx="18"/>
+    </clipPath>
+  </defs>
+
+  <g clip-path="url(#frame)">
+    <rect width="1200" height="340" fill="url(#background)"/>
+
+    <g fill="none" stroke="#6bbcff" stroke-width="1.5" opacity="0.13">
+      <circle cx="1090" cy="30" r="72"/>
+      <circle cx="1090" cy="30" r="126"/>
+      <circle cx="1090" cy="30" r="180"/>
+      <circle cx="1090" cy="30" r="234"/>
+    </g>
+
+    <rect x="68" y="48" width="42" height="3" rx="1.5" fill="url(#accent)"/>
+    <text x="126" y="55"
+          fill="#9cccf6"
+          font-family="Segoe UI, Arial, sans-serif"
+          font-size="15"
+          font-weight="600"
+          letter-spacing="3.2">
+      MICROSOFT FABRIC · WORKLOAD EXTENSIBILITY
+    </text>
+
+    <text x="68" y="128"
+          fill="#ffffff"
+          font-family="Segoe UI, Arial, sans-serif"
+          font-size="50"
+          font-weight="300">
+      Building Microsoft Fabric
+    </text>
+    <text x="68" y="184"
+          fill="#ffffff"
+          font-family="Segoe UI, Arial, sans-serif"
+          font-size="54"
+          font-weight="700">
+      Workloads
+    </text>
+
+    <text x="68" y="224"
+          fill="#c4d8ed"
+          font-family="Segoe UI, Arial, sans-serif"
+          font-size="20">
+      A field guide from the first local item to tenant distribution
+    </text>
+
+    <g transform="translate(68 264)" font-family="Segoe UI, Arial, sans-serif">
+      <g>
+        <rect width="218" height="44" rx="7" fill="#0d47a1"/>
+        <text x="17" y="28" fill="#ffffff" font-size="15" font-weight="700">01</text>
+        <text x="55" y="28" fill="#ffffff" font-size="15">Understand</text>
+      </g>
+      <g transform="translate(230 0)">
+        <rect width="218" height="44" rx="7" fill="#1b7a37"/>
+        <text x="17" y="28" fill="#ffffff" font-size="15" font-weight="700">02</text>
+        <text x="55" y="28" fill="#ffffff" font-size="15">Develop</text>
+      </g>
+      <g transform="translate(460 0)">
+        <rect width="218" height="44" rx="7" fill="#b14e00"/>
+        <text x="17" y="28" fill="#ffffff" font-size="15" font-weight="700">03</text>
+        <text x="55" y="28" fill="#ffffff" font-size="15">Production</text>
+      </g>
+      <g transform="translate(690 0)">
+        <rect width="218" height="44" rx="7" fill="#6f42c1"/>
+        <text x="17" y="28" fill="#ffffff" font-size="15" font-weight="700">04</text>
+        <text x="55" y="28" fill="#ffffff" font-size="15">Distribute</text>
+      </g>
+    </g>
+
+    <g transform="translate(1018 238)">
+      <rect width="114" height="70" rx="10" fill="#ffffff" opacity="0.08"/>
+      <path d="M22 49V25h20v24M47 49V15h20v34M72 49V31h20v18"
+            fill="none"
+            stroke="#7ec8ff"
+            stroke-width="4"
+            stroke-linecap="round"
+            stroke-linejoin="round"/>
+      <path d="M18 54h80" stroke="#ffffff" stroke-width="2" opacity="0.65"/>
+    </g>
+  </g>
+
+  <rect x="1" y="1" width="1198" height="338" rx="17"
+        fill="none" stroke="#244d79" stroke-width="2"/>
 </svg>
