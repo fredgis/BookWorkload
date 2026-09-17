@@ -4,10 +4,10 @@
      viewBox="0 0 1200 340"
      role="img"
      aria-labelledby="title description">
-  <title id="title">Building Microsoft Fabric Workloads</title>
+  <title id="title">Building Production-Ready Workloads for Microsoft Fabric</title>
   <desc id="description">
-    A field guide covering workload architecture, development, production,
-    and distribution in Microsoft Fabric.
+    A field guide covering the ISV business case, workload architecture,
+    development, production operations, and distribution in Microsoft Fabric.
   </desc>
 
   <defs>
@@ -41,7 +41,7 @@
           font-size="15"
           font-weight="600"
           letter-spacing="3.2">
-      MICROSOFT FABRIC · WORKLOAD EXTENSIBILITY
+      MICROSOFT FABRIC · WORKLOAD ENGINEERING
     </text>
 
     <text x="68" y="128"
@@ -49,21 +49,21 @@
           font-family="Segoe UI, Arial, sans-serif"
           font-size="50"
           font-weight="300">
-      Building Microsoft Fabric
+      Building Production-Ready
     </text>
     <text x="68" y="184"
           fill="#ffffff"
           font-family="Segoe UI, Arial, sans-serif"
           font-size="54"
           font-weight="700">
-      Workloads
+      Workloads for Microsoft Fabric
     </text>
 
     <text x="68" y="224"
           fill="#c4d8ed"
           font-family="Segoe UI, Arial, sans-serif"
           font-size="20">
-      A field guide from the first local item to tenant distribution
+      From the ISV business case to secure operations and distribution
     </text>
 
     <g transform="translate(68 264)" font-family="Segoe UI, Arial, sans-serif">

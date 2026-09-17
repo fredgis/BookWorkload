@@ -1,18 +1,18 @@
 <p align="center">
-  <img src="assets/nfo-banner.svg" alt="Building Microsoft Fabric Workloads" width="720">
+  <img src="assets/nfo-banner.svg" alt="Building Production-Ready Workloads for Microsoft Fabric" width="720">
 </p>
 
 <p align="center">
   <a href="https://fredgis.github.io/BookWorkload/"><b>Read online</b></a>
   &nbsp;·&nbsp;
-  <a href="workload-chapter.pdf">PDF</a>
+  <a href="Building%20Production-Ready%20Workloads%20for%20Microsoft%20Fabric.pdf">PDF</a>
   &nbsp;·&nbsp;
-  <a href="workload-chapter-full.md">Markdown</a>
+  <a href="Building%20Production-Ready%20Workloads%20for%20Microsoft%20Fabric.md">Markdown</a>
 </p>
 
-# Building Microsoft Fabric Workloads with the Extensibility Toolkit
+# Building Production-Ready Workloads for Microsoft Fabric
 
-> Understand the model, develop a workload (with AI assistance), take it to production, and distribute it.
+> From the ISV business case and architecture to secure delivery, operations, and distribution.
 
 This repository contains the Workload manuscript for a developer-focused Microsoft Fabric book. It is written for ISVs, software development companies, developers, and architects who want to bring an existing SaaS or PaaS into Fabric without moving their product logic into the customer's tenant.
 
@@ -22,22 +22,27 @@ The official starter kit uses TypeScript and React for the publisher-hosted fron
 
 > Content reviewed against Microsoft Learn and the official toolkit repositories on September 17, 2026.
 
-## Read the chapter
+## Read the manuscript
 
 | Format | Where | What you get |
 |--------|-------|--------------|
 | Online (HTML) | https://fredgis.github.io/BookWorkload/ | Two tabs, the outline and the manuscript. Self-contained, syntax-highlighted, diagrams inline. |
-| PDF | [workload-chapter.pdf](workload-chapter.pdf) | Cover page, colored Contents, PDF bookmarks, clickable links. |
-| Markdown | [workload-chapter-full.md](workload-chapter-full.md) | The reviewed manuscript and code examples. |
-| Outline | [workload-chapter-outline.md](workload-chapter-outline.md) | The detailed plan. |
+| PDF | [Building Production-Ready Workloads for Microsoft Fabric.pdf](Building%20Production-Ready%20Workloads%20for%20Microsoft%20Fabric.pdf) | Cover page, colored Contents, PDF bookmarks, clickable links. |
+| Markdown | [Building Production-Ready Workloads for Microsoft Fabric.md](Building%20Production-Ready%20Workloads%20for%20Microsoft%20Fabric.md) | The reviewed manuscript and code examples. |
+| Outline | [Building Production-Ready Workloads for Microsoft Fabric - Outline.md](Building%20Production-Ready%20Workloads%20for%20Microsoft%20Fabric%20-%20Outline.md) | The detailed plan. |
 
 ## How the manuscript is organized
 
 Four movements follow the workload lifecycle. The first also explains why the model matters to an ISV or SDC: the workload becomes the Fabric-facing product surface, while the existing service and intellectual property remain in the publisher's cloud.
 
+| Reading path | Sections | Outcome |
+|---|---|---|
+| **Fast track** | 0 → 2 → 5 → 6 → 9 | Open a first workload and connect the GreenGrid example |
+| **Production track** | 10 through 17 | Turn the prototype into a hosted, secured, packaged, assigned, and supportable product |
+
 ```mermaid
 flowchart LR
-  U["1 · Understand<br/>the model"]
+  U["1 · Understand<br/>business and model"]
   D["2 · Develop<br/>by hand and with AI"]
   P["3 · Go to production<br/>host · secure · package"]
   X["4 · Distribute<br/>tenant · Workload Hub · Marketplace"]
@@ -105,8 +110,8 @@ Manifest-package limits, current setup and validation commands, AI guidance, Pyt
 
 ## Files
 
-- `index.html`: the manuscript served at the GitHub Pages site root (a copy of `workload-chapter.html`).
-- `workload-chapter.html`: the self-contained web version, with the outline and manuscript as two tabs.
-- `workload-chapter.pdf`: the print version with a cover, colored Contents, and bookmarks.
-- `workload-chapter-full.md` and `workload-chapter-outline.md`: the manuscript and its outline.
+- `index.html`: the manuscript served at the GitHub Pages site root (a copy of the named HTML file).
+- `Building Production-Ready Workloads for Microsoft Fabric.html`: the self-contained web version, with the outline and manuscript as two tabs.
+- `Building Production-Ready Workloads for Microsoft Fabric.pdf`: the print version with a cover, colored Contents, and bookmarks.
+- `Building Production-Ready Workloads for Microsoft Fabric.md` and its `- Outline.md` companion: the manuscript and its outline.
 - `assets/`: the compact README banner and the GreenGrid screenshots.

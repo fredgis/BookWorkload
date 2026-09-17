@@ -1,10 +1,12 @@
-# Building Microsoft Fabric Workloads with the Extensibility Toolkit
+# Building Production-Ready Workloads for Microsoft Fabric
 
-### Understand the model, develop a workload (with AI assistance), take it to production, and distribute it
+### From the ISV business case and architecture to secure delivery, operations, and distribution
 
 > Reviewed against Microsoft Learn and the official toolkit repositories on September 17, 2026.
 
 ## Contents
+
+**[Choose your path](#choose-your-path)**
 
 **[0. Before you begin](#0-before-you-begin)**
 
@@ -95,6 +97,16 @@ flowchart LR
 
 ---
 
+## Choose your path
+
+| Path | Sections | Outcome |
+|---|---|---|
+| **Fast track** | 0 → 2 → 5 → 6 → 9 | Open a first workload and connect the GreenGrid example |
+| **Production track** | 10 through 17 | Turn the prototype into a hosted, secured, packaged, assigned, and supportable product |
+
+- Introduce a visual convention for **Stable concept** versus **Current platform behavior, verified September 2026**.
+- Direct business readers to section 1 before either technical path.
+
 # 0. Before you begin
 
 - 0.1 Environment, accounts, and assumed concepts. Entra app creation rights and an F, P, or Trial capacity are required. An Azure subscription is optional until Azure hosting is used. Node.js, PowerShell, .NET, Azure CLI, and the toolkit scripts. Administrator, capacity, workspace, publisher, and user roles kept separate.
@@ -109,6 +121,7 @@ flowchart LR
 
 ## 1. What a workload is, and why an ISV would build one
 
+- Introduce GreenGrid immediately as the running example: an energy-scoring SaaS that works with approved OneLake data while its scoring IP stays in the publisher cloud.
 - 1.1 The ISV business case: bring your service to Fabric data. Cover ISVs and SDCs, an existing SaaS or PaaS, publisher-owned IP, lower per-customer integration work, and a repeatable path from one tenant to selected customers and public distribution. Separate Workload Hub installation from Microsoft Marketplace commerce.
 - 1.2 What Fabric gives you, and what a workload adds. Workspaces, items, Fabric APIs, OneLake data, and explicit integrations with catalog, monitoring, Git, and deployment. State clearly that sensitivity protection and built-in behavior are not inherited automatically.
 - 1.3 The toolkit, when to use it, and its limits. Frontend-first baseline, optional remote endpoints, current first-party documentation conflicts, capacity requirements, and alternatives such as Power BI custom visuals, Activator, pipelines, notebooks, and Azure services.
@@ -259,6 +272,8 @@ flowchart LR
 ## 7. Developing with AI assistance
 
 > The toolkit repository includes AI guidance and a Copilot agent. These files are versioned project documentation and can lag behind Microsoft Learn. The optional UX MCP referenced by the toolkit is community-hosted, not a Microsoft Fabric service.
+
+- Add the visual rule **AI output is a proposal, not platform truth**, followed by four gates: SDK → manifests → build → runtime.
 
 ```mermaid
 flowchart TB
@@ -432,11 +447,11 @@ flowchart TB
 
 ## Appendices
 
-- **Appendix A: Manifest package reference** (`WorkloadManifest.xml`, `Product.json`, paired item XML/JSON, limits)
-- **Appendix B: Setup, development, package, and validator commands**
-- **Appendix C: AI guidance reference** (`.ai`, `@fabric`, scoped instructions, optional community UX MCP)
-- **Appendix D: Python service reference**
-- **Appendix E: Release and compliance checklist, diagnostics quick reference**
+- **Appendix A: Manifest package reference** (`WorkloadManifest.xml`, `Product.json`, paired item XML/JSON, release checks, limits, naming)
+- **Appendix B: Setup, development, remote-hosting, package, and validator command table**
+- **Appendix C: AI guidance hierarchy and the SDK → manifests → build → runtime validation gates**
+- **Appendix D: Python service reference table** (example label, demonstrated boundary, production gaps)
+- **Appendix E: Actionable release/compliance checklist and symptom-to-boundary diagnostics table**
 - **Appendix F: Glossary and resources**
 - **Appendix G: One-page cheat sheet** (commands, manifests, the identity rule, dev-to-prod swaps, diagnostics by boundary)
 
