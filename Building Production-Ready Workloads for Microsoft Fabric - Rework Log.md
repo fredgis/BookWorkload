@@ -56,7 +56,7 @@ This log maps the audit items T01 through T15 to the V1.0.0 manuscript. It separ
 | HTML | Complete | Named HTML and `index.html` are byte-identical, contain unique IDs and 16 inline SVG diagrams, and have no external script dependency |
 | HTML behavior | Complete | Outline/Manuscript click and keyboard navigation passed. Mobile emulation at 390 by 844 and desktop width checks found no page-level horizontal overflow or runtime exception |
 | Color contrast | Complete | Web chrome, movement headers, code text, muted text, and cover text met WCAG AA normal-text contrast for the tested color pairs |
-| PDF | Complete | 60 pages, 77 bookmarks, 266 clickable links, correct title metadata, and no blank spill page |
+| PDF | Complete | 53 pages, 77 bookmarks, 243 clickable links, the previous edition's designed cover and spacious contents treatment, rasterized Mermaid diagrams, correct title metadata, and no blank spill page |
 | Fabric tenant execution | Not run | No tenant was modified and the first-run, assignment, consent, or remote endpoint flows were not executed for this editorial release |
 | Fabric publishing validator | Not run | The manuscript documents its inputs and outputs but does not claim a validator result |
 | Marketplace lifecycle | Not run | No offer, webhook, fulfillment, or billing flow was created or exercised |
